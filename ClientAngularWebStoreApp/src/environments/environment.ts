@@ -3,6 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  personServiceUrl:"https://localhost:7244",
+  productServiceUrl:"https://localhost:7244",
+  allowedDomains:['localhost:7244'], 
   production: false
 };
 

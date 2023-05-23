@@ -1,0 +1,17 @@
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\bin\Debug\net5.0\Services.deps.json
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\bin\Debug\net5.0\Services.dll
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\bin\Debug\net5.0\Services.pdb
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\bin\Debug\net5.0\Common.dll
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\bin\Debug\net5.0\DataAcceess.dll
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\bin\Debug\net5.0\Common.pdb
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\bin\Debug\net5.0\DataAcceess.pdb
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\obj\Debug\net5.0\Services.csproj.AssemblyReference.cache
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\obj\Debug\net5.0\Services.GeneratedMSBuildEditorConfig.editorconfig
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\obj\Debug\net5.0\Services.AssemblyInfoInputs.cache
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\obj\Debug\net5.0\Services.AssemblyInfo.cs
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\obj\Debug\net5.0\Services.csproj.CoreCompileInputs.cache
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\obj\Debug\net5.0\Services.csproj.CopyComplete
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\obj\Debug\net5.0\Services.dll
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\obj\Debug\net5.0\refint\Services.dll
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\obj\Debug\net5.0\Services.pdb
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Services\obj\Debug\net5.0\ref\Services.dll

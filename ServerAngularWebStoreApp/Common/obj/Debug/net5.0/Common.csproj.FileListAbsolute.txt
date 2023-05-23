@@ -1,0 +1,12 @@
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Common\obj\Debug\net5.0\Common.csproj.AssemblyReference.cache
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Common\obj\Debug\net5.0\Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Common\obj\Debug\net5.0\Common.AssemblyInfoInputs.cache
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Common\obj\Debug\net5.0\Common.AssemblyInfo.cs
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Common\obj\Debug\net5.0\Common.csproj.CoreCompileInputs.cache
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Common\bin\Debug\net5.0\Common.deps.json
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Common\bin\Debug\net5.0\Common.dll
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Common\bin\Debug\net5.0\Common.pdb
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Common\obj\Debug\net5.0\Common.dll
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Common\obj\Debug\net5.0\refint\Common.dll
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Common\obj\Debug\net5.0\Common.pdb
+D:\boze pomozi\Projekat_Web2\ServerAngularWebStoreApp\Common\obj\Debug\net5.0\ref\Common.dll
