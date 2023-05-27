@@ -11,5 +11,7 @@ namespace DataAcceess.IRepository
         Task<IEnumerable<Person>> GetPersonByType(Enums.PersonType type);
 
         Task<Person> GetPersonByUserId(int id);
+
+        Task<Person> GetByUserName(string userName);
     }
 }

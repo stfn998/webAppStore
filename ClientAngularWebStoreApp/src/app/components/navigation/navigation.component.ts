@@ -10,7 +10,9 @@ export class NavigationComponent implements OnInit {
   public personId!: string | null ;
   role!: string |  null;
 
-  constructor() { }
+  constructor() { 
+    this.checkToken();
+  }
 
   ngOnInit(): void {
     if(localStorage.getItem('token') !== null)

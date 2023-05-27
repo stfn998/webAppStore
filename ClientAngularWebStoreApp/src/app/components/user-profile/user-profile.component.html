@@ -1,0 +1,105 @@
+<div class="container">
+    <div class="main-body">
+    
+          <!-- Breadcrumb -->
+          <nav aria-label="breadcrumb" class="main-breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a class="router-link" [routerLink]="['/home']">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+            </ol>
+          </nav>
+          <!-- /Breadcrumb -->
+            <div class="row gutters-sm">
+              <div class="col-md-4 mb-3">
+                <div class="card card-full-height">
+                  <div class="card-body">
+                    <div class="d-flex py-3 flex-column align-items-center text-center">
+                      <img *ngIf="person?.imageUrl else defaultImage" [src]="person?.imageUrl" alt="User profile picture" class="rounded-circle" style="width:150px; height:auto;">
+                      <ng-template #defaultImage>
+                        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="rounded-circle" style="width:150px; height:auto;">
+                      </ng-template>
+                      <div class="mt-3">
+                        <h4>{{person?.firstName}} {{person?.lastName}}</h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="card mb-3">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Full Name</h6>
+                      </div>
+                      <div class="col-sm-9 text-secondary">
+                        {{person?.firstName}} {{person?.lastName}}
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Username</h6>
+                      </div>
+                      <div class="col-sm-9 text-secondary">
+                        {{person?.userName}}
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Email</h6>
+                      </div>
+                      <div class="col-sm-9 text-secondary">
+                        {{person?.email}}
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Address</h6>
+                      </div>
+                      <div class="col-sm-9 text-secondary">
+                        {{person?.address}}
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Birth</h6>
+                      </div>
+                      <div class="col-sm-9 text-secondary">
+                        {{person?.birth | date:'dd/MM/yyyy'}}
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Type</h6>
+                      </div>
+                      <div class="col-sm-9 text-secondary">
+                        {{person?.personType}}
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Verification status</h6>
+                      </div>
+                      <div class="col-sm-9 text-secondary">
+                        {{person?.verification}}
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <a class="btn btn-primary " [routerLink]="['/home/persons/edit/', person?.id]">Edit</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+        </div>
+    </div>

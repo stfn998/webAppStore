@@ -17,6 +17,7 @@ namespace Common.Models
         public string Address { get; set; }
         public DateTime Birth { get; set; }
         public PersonType PersonType { get; set; }
+        public bool DecisionMade { get; set; }
         public VerificationStatus Verification { get; set; }
         public string ImageUrl { get; set; }
         public User User { get; set; }

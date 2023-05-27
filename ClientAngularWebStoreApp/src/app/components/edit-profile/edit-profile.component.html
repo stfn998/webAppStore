@@ -1,0 +1,142 @@
+<div class="container">
+    <div class="main-body">
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="main-breadcrumb">
+            <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="router-link" [routerLink]="['/home']">Home</a></li>
+            <li class="breadcrumb-item"><a class="router-link" [routerLink]="['/home/persons', person?.id]">My profile</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
+            </ol>
+        </nav>
+        <!-- /Breadcrumb -->
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card card-full-height">
+                  <div class="card-body">
+                    <div class="d-flex py-3 flex-column align-items-center text-center">
+                      <img *ngIf="person?.imageUrl else defaultImage" [src]="person?.imageUrl" alt="User profile picture" class="rounded-circle" style="width:150px; height:auto;">
+                      <ng-template #defaultImage>
+                        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" class="rounded-circle" style="width:150px; height:auto;">
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <div class="col-lg-8">
+                <div class="card card-full-height">
+                    <div class="card-body">
+                        <form [formGroup]="editForm" (ngSubmit)="onSaveChange(editForm)">
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Username</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <div class="input-field"> 
+                                        <input formControlName="userName" id="userName" type="text" [value]="person?.userName">  
+                                    </div>
+                                    <div class="alert alert-danger" *ngIf="userName?.errors?.['required']">
+                                        Username is requiered.
+                                    </div>
+                                    <div class="alert alert-danger" *ngIf="userName?.errors?.['pattern']">
+                                        Username can only contain alphanumeric characters.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Email</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <div class="input-field"> 
+                                        <input formControlName="email" id="email" type="text" [value]="person?.email">  
+                                    </div>    
+                                    <div class="alert alert-danger" *ngIf="email?.errors?.['required']">
+                                        Email is requiered.
+                                    </div>   
+                                    <div class="alert alert-danger" *ngIf="email?.errors?.['email']">
+                                        Email format in incorrect.
+                                    </div>                        
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">First name</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <div class="input-field"> 
+                                        <input formControlName="firstName" id="firstName" type="text" [value]="person?.firstName">  
+                                    </div>
+                                    <div class="alert alert-danger" *ngIf="firstName?.errors?.['required']">
+                                        First name is requiered.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Last name</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <div class="input-field"> 
+                                        <input formControlName="lastName" id="lastName" type="text" [value]="person?.lastName">  
+                                    </div>    
+                                    <div class="alert alert-danger" *ngIf="lastName?.errors?.['required']">
+                                        Last name is requiered.
+                                    </div>                            
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Date of birth</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <div class="input-field">
+                                        <input formControlName="birth" id="birth" type="text" [value]="person?.birth | date:'dd/MM/yyyy'">  
+                                    </div> 
+                                    <div class="alert alert-danger" *ngIf="birth?.errors?.['required']">
+                                        Date of birth is requiered.
+                                    </div> 
+                                    <div class="alert alert-danger" *ngIf="birth?.errors?.['pattern']">
+                                        Date is in invalid format (dd/MM/yyyy).
+                                    </div> 
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Address</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <div class="input-field"> 
+                                        <input formControlName="address" id="address" type="text" [value]="person?.address">  
+                                    </div> 
+                                    <div class="alert alert-danger" *ngIf="address?.errors?.['required']">
+                                        Address is requiered.
+                                    </div> 
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Profile picture</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <div class="input-field">
+                                        <input type="file" id="imageUrl" (change)="onFileSelected($event)" accept="image/*">
+                                    </div>
+                                </div>                            
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <button class="btn btn-primary" [disabled]="!editForm.valid">
+                                        Update profile
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #error></ng-template>

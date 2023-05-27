@@ -74,17 +74,29 @@ namespace Services.Service
                 throw new KeyNotFoundException("User does not exist.");
             }
 
-            if (dto.UserName != null)
+            User user = await _genericRepositoryUser.GetByObject(person.IdUser);
+
+            if (dto.UserName != user.UserName)
             {
-                User user = await _genericRepositoryUser.GetByObject(person.IdUser);
                 if (user == null)
                 {
                     throw new KeyNotFoundException("User does not exist.");
                 }
-                user.UserName = dto.UserName;
-                await _genericRepositoryUser.Update(user);
-                await _genericRepositoryUser.Save();
+
+                // check if a user with the given username already exists
+                var existingUser = await _personRepository.GetByUserName(dto.UserName);
+
+                if (existingUser != null && existingUser.Id != user.Id)
+                {
+                    throw new InvalidOperationException("Username already exists.");
+                }
+                else
+                {
+                    user.UserName = dto.UserName;
+                    isChanged = true;
+                }
             }
+
             if (dto.Address != person.Address)
             {
                 person.Address = dto.Address;
@@ -102,7 +114,57 @@ namespace Services.Service
             }
             if (dto.LastName != person.LastName)
             {
-                person.FirstName = dto.LastName;
+                person.LastName = dto.LastName;
+                isChanged = true;
+            }
+            if (Convert.ToDateTime(dto.Birth) != person.Birth)
+            {
+                person.Birth = Convert.ToDateTime(dto.Birth);
+                isChanged = true;
+            }
+            if (dto.ImageUrl != person.ImageUrl)
+            {
+                string mimeType;
+                string fileExtension = "";
+                byte[] imageBytes;
+
+                if (dto.ImageUrl.StartsWith("data:image"))
+                {
+                    var base64Data = dto.ImageUrl.Split(",").Last();
+                    mimeType = dto.ImageUrl.Split(",").First().Split(";").First().Split(":").Last();
+                    fileExtension = mimeType.Split("/").Last();
+                    imageBytes = Convert.FromBase64String(base64Data);
+                }
+                else
+                {
+                    imageBytes = Convert.FromBase64String(dto.ImageUrl);
+                }
+
+                // Generate a unique file name or use any other logic as needed
+                string imageName = $"pic_{person.IdUser}_name_{person.FirstName}.{fileExtension}";
+
+                string imagesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "..", "Common", "Images");
+
+                // Normalize the path
+                imagesDirectory = Path.GetFullPath(imagesDirectory);
+
+                if (!Directory.Exists(imagesDirectory))
+                {
+                    Directory.CreateDirectory(imagesDirectory);
+                }
+
+                string imagePath = Path.Combine(imagesDirectory, imageName);
+
+                try
+                {
+                    await File.WriteAllBytesAsync(imagePath, imageBytes);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error writing to file: " + ex.Message);
+                }
+
+                person.ImageUrl = imagePath;
                 isChanged = true;
             }
 
@@ -110,6 +172,10 @@ namespace Services.Service
             {
                 await _genericRepositoryPerson.Update(person);
                 await _genericRepositoryPerson.Save();
+
+                await _genericRepositoryUser.Update(user);
+                await _genericRepositoryUser.Save();
+
                 return true;
             }
             else

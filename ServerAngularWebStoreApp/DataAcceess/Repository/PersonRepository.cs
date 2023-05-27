@@ -27,5 +27,10 @@ namespace DataAcceess.Repository
         {
             return await table.Where(p => p.IdUser == id)?.FirstOrDefaultAsync();
         }
+
+        public async Task<Person> GetByUserName(string userName)
+        {
+            return await table.FirstOrDefaultAsync(user => user.User.UserName == userName);
+        }
     }
 }

@@ -150,7 +150,6 @@ namespace ServerAngularWebStoreApp.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
         [Route("{idPerson}/image")]
         public async Task<IActionResult> UploadImage(int idPerson, IFormFile file)

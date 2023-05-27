@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+}
+
+table th {
+    background-color: #4A5568;
+    color: white;
+    padding: 10px 15px;
+    border-bottom: 2px solid #2D3748;
+}
+
+table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+button {
+    margin-right: 10px;
+}
+
+tr:nth-child(even) {background-color: #F7FAFC;}
+
+.btn-primary:disabled {
+    background-color: #CBD5E0;
+    border-color: #CBD5E0;
+}

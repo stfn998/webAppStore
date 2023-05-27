@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { User } from '../models/user.models';
 import { Token } from '../models/token.models';
+import { Verification } from '../models/verification.model';
+import { AcceptOrder } from '../models/accept-order.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +57,7 @@ export class PersonService {
 
   public updatePerson(idPerson: string | null, data: any) {
     return this.http
-      .put<Person>(environment.personServiceUrl + '/api/person/' + idPerson, data)
+      .put<any>(environment.personServiceUrl + '/api/person/' + idPerson, data)
   }
 
   getImage(idPerson: number): Observable<Blob> {
@@ -71,6 +73,16 @@ export class PersonService {
   loginGoogle(person: Person): Observable<Token> {
     return this.http
       .post<Token>(environment.personServiceUrl + '/api/account/login-google', person);
+  }
+
+  public verification(data: Verification) {
+    if(data.isAccep) {
+      return this.http
+      .post<AcceptOrder>(environment.personServiceUrl + '/api/admin/accept', data);
+    } else {
+      return this.http
+      .post<AcceptOrder>(environment.personServiceUrl + '/api/admin/denied', data);
+    }
   }
 
 }

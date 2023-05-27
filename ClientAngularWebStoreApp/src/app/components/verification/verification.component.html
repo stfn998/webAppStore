@@ -1,0 +1,32 @@
+<h2>Sellers</h2>
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">First name</th>
+      <th scope="col">Last name</th>
+      <th scope="col">Person type</th>
+      <th scope="col">Verification status</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let person of persons">
+      <td>{{ person.firstName }}</td>
+      <td>{{ person.lastName }}</td>
+      <td>{{ person.personType }}</td>
+      <td>{{ person.verification }}</td>
+      <td>
+        <button class="btn btn-primary" (click)="onAccept(person.id)" [disabled]="person.decisionMade">
+          Accept
+        </button>
+      </td>
+      <td>
+        <button class="btn btn-primary" (click)="onDenied(person.id)" [disabled]="person.decisionMade">
+          Denied
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+

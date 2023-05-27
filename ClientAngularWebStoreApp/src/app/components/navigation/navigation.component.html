@@ -4,10 +4,20 @@
         <!-- <a class="navbar-brand" [routerLink]="['/home']">Home</a> -->
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ml-auto" *ngIf="isLogged">
+            <li>
+              <a class="nav-link" [routerLink]="['/home/persons', personId]">
+                My profile
+              </a>
+            </li>
+            <li *ngIf="isLogged && role === 'Admin'">
+              <a class="nav-link" [routerLink]="['/home/verification']">
+                Verification
+                </a>
+            </li>
             <li *ngIf="isLogged">
-              <a class="nav-link" [routerLink]="['/']" (click)="logOut()"
-                >Log out</a
-              >
+              <a class="nav-link" [routerLink]="['/']" (click)="logOut()">
+                Log out
+              </a>
             </li>
           </ul>
         </div>

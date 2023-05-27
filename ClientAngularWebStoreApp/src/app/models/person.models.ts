@@ -8,7 +8,8 @@ export interface Person{
     imageUrl: string,
     birth: string,
     personType: number,
-    verification: string
+    verification: string,
+    decisionMade: boolean
 }
 
 export class Person {

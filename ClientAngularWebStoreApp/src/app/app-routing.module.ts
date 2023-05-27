@@ -3,11 +3,22 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { HomeComponent } from './components/home/home.component';
+import { LoginGuard } from './guards/login.guard';
+import { LoggedInGuard } from './guards/logged-in.guard';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { AdminGuard } from './guards/admin.guard';
+import { VerificationComponent } from './components/verification/verification.component';
 
 const routes: Routes = [
-  { path:'', component: LoginComponent },
-  { path: 'signup', component: SignupComponent },
-  { path: 'home', component: HomeComponent }
+  { path:'', component: LoginComponent, canActivate: [LoginGuard] },
+  { path: 'signup', component: SignupComponent, canActivate: [LoginGuard] },
+  { path: 'home', component: HomeComponent, canActivate: [LoggedInGuard],
+       children: [ { path: 'persons/:personId', component: UserProfileComponent, canActivate: [LoggedInGuard]}, 
+                   { path: 'persons/edit/:personId', component: EditProfileComponent, canActivate: [LoggedInGuard]},
+                   { path: 'verification', component: VerificationComponent, canActivate: [AdminGuard]}]
+  },
+  { path:'**', redirectTo: '' },
 ];
 
 @NgModule({

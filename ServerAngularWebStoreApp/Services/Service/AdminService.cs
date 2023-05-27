@@ -43,6 +43,7 @@ namespace Services.Service
             }
 
             person.Verification = status;
+            person.DecisionMade = true;
             await _genericRepositroy.Update(person);
             await _genericRepositroy.Save();
 

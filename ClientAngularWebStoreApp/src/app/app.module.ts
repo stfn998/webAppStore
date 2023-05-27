@@ -14,6 +14,10 @@ import { HomeComponent } from './components/home/home.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { AuthInterceptor } from './services/auth.interceptor';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { DatePipe } from '@angular/common';
+import { VerificationComponent } from './components/verification/verification.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +26,9 @@ import { AuthInterceptor } from './services/auth.interceptor';
     SignupComponent,
     HomeComponent,
     NavigationComponent,
+    UserProfileComponent,
+    EditProfileComponent,
+    VerificationComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,6 +41,7 @@ import { AuthInterceptor } from './services/auth.interceptor';
     SocialLoginModule 
   ],
   providers: [
+    DatePipe,
     {
       provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true
     }

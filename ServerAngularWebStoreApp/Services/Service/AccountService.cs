@@ -2,8 +2,11 @@
 using Common.DTOs;
 using Common.Models;
 using DataAcceess.IRepository;
+using Microsoft.AspNetCore.Http;
 using Services.IService;
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Services.Service
@@ -35,7 +38,7 @@ namespace Services.Service
             User user = await _userRepository.GetUserByUsername(dto.UserName);
             if (user != null)
             {
-                return true;
+                return false;
             }
 
             user = new User
@@ -61,24 +64,69 @@ namespace Services.Service
                 Birth = Convert.ToDateTime(dto.Birth),
                 Address = dto.Address,
                 IdUser = user.Id,
-                ImageUrl = dto.ImageUrl
+                PersonType = type
             };
 
-            if (type == Enums.PersonType.Customer)
+            if (type == Enums.PersonType.Seller)
             {
-                person.PersonType = type;
-                person.Verification = Enums.VerificationStatus.None;
-            }
-            else if (type == Enums.PersonType.Seller)
-            {
-                person.PersonType = type;
                 person.Verification = Enums.VerificationStatus.OnHold;
+                person.DecisionMade = false;
+            }
+            else
+            {
+                person.Verification = Enums.VerificationStatus.None;
+                person.DecisionMade = true;
+            }
+
+            string mimeType;
+            string fileExtension = "";
+            byte[] imageBytes;
+
+            if (!String.IsNullOrEmpty(dto.ImageUrl))
+            {
+                if (dto.ImageUrl.StartsWith("data:image"))
+                {
+                    var base64Data = dto.ImageUrl.Split(",").Last();
+                    mimeType = dto.ImageUrl.Split(",").First().Split(";").First().Split(":").Last();
+                    fileExtension = mimeType.Split("/").Last();
+                    imageBytes = Convert.FromBase64String(base64Data);
+                }
+                else
+                {
+                    imageBytes = Convert.FromBase64String(dto.ImageUrl);
+                }
+
+                // Generate a unique file name or use any other logic as needed
+                string imageName = $"pic_{person.IdUser}_name_{person.FirstName}.{fileExtension}";
+
+                string imagesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "..", "Common", "Images");
+
+                // Normalize the path
+                imagesDirectory = Path.GetFullPath(imagesDirectory);
+
+                if (!Directory.Exists(imagesDirectory))
+                {
+                    Directory.CreateDirectory(imagesDirectory);
+                }
+
+                string imagePath = Path.Combine(imagesDirectory, imageName);
+
+                try
+                {
+                    await File.WriteAllBytesAsync(imagePath, imageBytes);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error writing to file: " + ex.Message);
+                }
+
+                person.ImageUrl = imagePath;
             }
 
             await _genericPersonRepository.Insert(person);
             await _genericPersonRepository.Save();
 
-            return false;
+            return true;
         }
     }
 }

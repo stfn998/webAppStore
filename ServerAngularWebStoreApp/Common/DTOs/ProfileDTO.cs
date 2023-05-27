@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Common.DTOs
 {
@@ -21,5 +22,8 @@ namespace Common.DTOs
 
         [StringLength(500, ErrorMessage = "Address length can't be more than 500.")]
         public string Address { get; set; }
+
+        public string ImageUrl { get; set; }
+        public string Birth { get; set; }
     }
 }

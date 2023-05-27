@@ -26,6 +26,7 @@ namespace Common.DTOs
         public string ImageUrl { get; set; }
         public DateTime Birth { get; set; }
         public PersonType PersonType { get; set; }
+        public bool DecisionMade { get; set; }
         public VerificationStatus Verification { get; set; }
     }
 }

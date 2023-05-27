@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.FileProviders;
+using System.Security.Claims;
 
 namespace ServerAngularWebStoreApp
 {
@@ -65,6 +68,19 @@ namespace ServerAngularWebStoreApp
                 };
             });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy =>
+                    policy.RequireClaim(ClaimTypes.Role, "Admin"));
+
+                options.AddPolicy("Customer", policy =>
+                    policy.RequireClaim(ClaimTypes.Role, "Customer"));
+
+                options.AddPolicy("Seller", policy =>
+                    policy.RequireClaim(ClaimTypes.Role, "Seller"));
+            });
+
+
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
@@ -95,6 +111,14 @@ namespace ServerAngularWebStoreApp
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.Configure<FormOptions>(options =>
+            {
+                options.ValueLengthLimit = int.MaxValue;
+                options.MultipartBodyLengthLimit = int.MaxValue;
+                options.MemoryBufferThreshold = int.MaxValue;
+            });
+
+
             //services.AddDatabaseDeveloperPageExceptionFilter();
         }
 
@@ -111,6 +135,11 @@ namespace ServerAngularWebStoreApp
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Common/Images")),RequestPath = "/Common/Images"
+            });
 
             app.UseCors("AllowMyAngularApp");
 
