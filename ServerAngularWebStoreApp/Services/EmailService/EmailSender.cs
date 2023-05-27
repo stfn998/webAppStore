@@ -1,6 +1,6 @@
-﻿using MimeKit;
-using System.Threading.Tasks;
-using MailKit.Net.Smtp;
+﻿using System.Threading.Tasks;
+using System.Net.Mail;
+using System.Net;
 
 namespace Services.EmailService
 {
@@ -13,24 +13,23 @@ namespace Services.EmailService
             _emailConfig = emailConfig;
         }
 
-        public async Task SendEmail(Message message)
+        public async Task SendEmailAsync(Message message)
         {
             var emailMessage = CreateEmailMessage(message);
 
-            Send(emailMessage);
+            await Send(emailMessage);
         }
 
-        private async Task Send(MimeMessage mailMessage)
+        private async Task Send(MailMessage mailMessage)
         {
-            using (var client = new SmtpClient())
+            using (var client = new SmtpClient(_emailConfig.SmtpServer, _emailConfig.Port))
             {
+                client.EnableSsl = true;
+                client.Credentials = new NetworkCredential(_emailConfig.UserName, _emailConfig.Password);
+
                 try
                 {
-                    client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, true);
-                    client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    client.Authenticate(_emailConfig.UserName, _emailConfig.Password);
-
-                    client.Send(mailMessage);
+                    await client.SendMailAsync(mailMessage);
                 }
                 catch
                 {
@@ -38,24 +37,25 @@ namespace Services.EmailService
                 }
                 finally
                 {
-                    client.Disconnect(true);
+                    //client.Disconnect(true);
                     client.Dispose();
                 }
             }
         }
 
-        private MimeMessage CreateEmailMessage(Message message)
+        private MailMessage CreateEmailMessage(Message message)
         {
-            var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress(_emailConfig.From));
-            emailMessage.To.AddRange(message.To);
-            emailMessage.Subject = message.Subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text)
+            var mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress(_emailConfig.From); // From is a string
+            foreach (var recipient in message.To)
             {
-                Text = message.Content
-            };
+                mailMessage.To.Add(new MailAddress(recipient.Address)); // recipient should be string
+            }
+            mailMessage.Subject = message.Subject;
+            mailMessage.Body = message.Content;
 
-            return emailMessage;
+            return mailMessage;
         }
     }
+
 }

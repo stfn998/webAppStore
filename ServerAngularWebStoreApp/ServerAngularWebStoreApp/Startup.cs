@@ -80,7 +80,6 @@ namespace ServerAngularWebStoreApp
                     policy.RequireClaim(ClaimTypes.Role, "Seller"));
             });
 
-
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
@@ -107,7 +106,7 @@ namespace ServerAngularWebStoreApp
 
             var emailConfig = Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
             services.AddSingleton(emailConfig);
-            services.AddScoped(typeof(IEmailSender), typeof(EmailSender));
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -117,7 +116,6 @@ namespace ServerAngularWebStoreApp
                 options.MultipartBodyLengthLimit = int.MaxValue;
                 options.MemoryBufferThreshold = int.MaxValue;
             });
-
 
             //services.AddDatabaseDeveloperPageExceptionFilter();
         }
@@ -138,7 +136,8 @@ namespace ServerAngularWebStoreApp
 
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Common/Images")),RequestPath = "/Common/Images"
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Common/Images")),
+                RequestPath = "/Common/Images"
             });
 
             app.UseCors("AllowMyAngularApp");

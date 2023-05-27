@@ -74,7 +74,7 @@ namespace Services.Service
                 sb.ToString()
             );
 
-            await _emailSender.SendEmail(message);
+            await _emailSender.SendEmailAsync(message);
         }
     }
 }
