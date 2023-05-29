@@ -96,6 +96,11 @@ namespace ServerAngularWebStoreApp
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPersonRepository, PersonRepository>();
 
+            services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddScoped<IAuthenticateService, AuthenticateService>();
             services.AddScoped<IJwtUtils, JwtUtils>();
@@ -103,6 +108,9 @@ namespace ServerAngularWebStoreApp
             services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAdminService, AdminService>();
+
+            services.AddScoped<IProductService, ProductService>();
+            //services.AddScoped<IOrderService, OrderService>();
 
             var emailConfig = Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
             services.AddSingleton(emailConfig);
@@ -134,11 +142,11 @@ namespace ServerAngularWebStoreApp
 
             app.UseHttpsRedirection();
 
-            app.UseStaticFiles(new StaticFileOptions
+            /*app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Common/Images")),
                 RequestPath = "/Common/Images"
-            });
+            });*/
 
             app.UseCors("AllowMyAngularApp");
 

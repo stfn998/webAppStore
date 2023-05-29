@@ -15,6 +15,7 @@ export class UserProfileComponent implements OnInit {
   isLogged: boolean = false;
   imageUrl!: SafeUrl;
   image:Blob=new Blob();
+  role!: string |  null;
 
   constructor(private personService: PersonService,
               private route: ActivatedRoute,
@@ -30,8 +31,9 @@ export class UserProfileComponent implements OnInit {
     const getPersonSub = this.personService.getPerson(Number(id)).subscribe(result => {
       this.person = result;
       this.isLogged = true;
+      this.role = localStorage.getItem('role');
     });
-    this.personService.getImage(Number(localStorage.getItem('personId'))).subscribe(
+    this.personService.getImage(Number(id)).subscribe(
       (response: any)=>
       {
         this.createImageFromBlob(response);

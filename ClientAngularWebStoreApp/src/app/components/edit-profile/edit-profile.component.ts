@@ -25,8 +25,10 @@ export class EditProfileComponent implements OnInit {
     email: new FormControl('', [Validators.email, Validators.required]),
     imageUrl: new FormControl('', Validators.required),
     birth: new FormControl('', [Validators.required, Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/)]),
-    address: new FormControl('', Validators.required)
+    address: new FormControl('', Validators.required),
+    shippingCost: new FormControl('', [Validators.required, Validators.min(0)]),
   });
+  role!: string |  null;
 
   dateOfBirth!: Date
 
@@ -84,6 +86,8 @@ export class EditProfileComponent implements OnInit {
       this.editForm.controls['birth'].setValue(this.datePipe.transform(new Date(this.person.birth), 'dd/MM/yyyy'));
       this.editForm.controls['address'].setValue(this.person?.address);
       this.editForm.controls['imageUrl'].setValue(this.person?.imageUrl);
+      this.editForm.controls['shippingCost'].setValue(this.person?.shippingCost);
+      this.role = localStorage.getItem('role');
     });
     this.personService.getImage(Number(localStorage.getItem('personId'))).subscribe(
       (response: any)=>
@@ -131,6 +135,10 @@ export class EditProfileComponent implements OnInit {
   }
   get imageUrl() {
     return this.editForm.get('imageUrl');
+  }
+
+  get shippingCost() {
+    return this.editForm.get('shippingCost');
   }
 
 }

@@ -9,7 +9,8 @@ export interface Person{
     birth: string,
     personType: number,
     verification: string,
-    decisionMade: boolean
+    decisionMade: boolean,
+    shippingCost: number;
 }
 
 export class Person {
@@ -23,4 +24,5 @@ export class Person {
     birth!: string;
     personType!: number;
     verification!: string;
+    shippingCost!: number;
 }

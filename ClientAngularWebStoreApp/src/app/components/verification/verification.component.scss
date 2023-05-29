@@ -30,3 +30,14 @@ tr:nth-child(even) {background-color: #F7FAFC;}
     background-color: #CBD5E0;
     border-color: #CBD5E0;
 }
+
+a.router-link {
+    color: blue; /* Set the link color */
+    text-decoration: underline; /* Underline the link */
+    cursor: pointer; /* Change the cursor to a pointer on hover */
+  }
+  
+  a.router-link:hover {
+    color: darkblue; /* Change the link color on hover */
+    text-decoration: underline; /* Underline the link on hover */
+  }

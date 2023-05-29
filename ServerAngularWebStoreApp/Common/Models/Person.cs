@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Common.Models.Enums;
 
 namespace Common.Models
@@ -21,5 +18,8 @@ namespace Common.Models
         public VerificationStatus Verification { get; set; }
         public string ImageUrl { get; set; }
         public User User { get; set; }
+        public ICollection<Product> Products { get; set; } // A seller can have many products
+        public ICollection<Order> Orders { get; set; } // A customer can have many orders
+        public float ShippingCost { get; set; } // New property
     }
 }

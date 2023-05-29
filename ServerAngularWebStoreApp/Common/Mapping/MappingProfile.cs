@@ -10,6 +10,9 @@ namespace Common.Mapping
         {
             CreateMap<Person, PersonDTO>().ReverseMap();
             CreateMap<User, AuthenticateRequestDTO>().ReverseMap();
+
+            CreateMap<Order, OrderDTO>().ReverseMap();
+            CreateMap<Product, ProductDTO>().ReverseMap();
         }
     }
 }

@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class NavigationComponent implements OnInit {
   public isLogged: boolean = false;
   public personId!: string | null ;
+  public activate!: string | null ;
   role!: string |  null;
 
   constructor() { 
@@ -19,6 +20,7 @@ export class NavigationComponent implements OnInit {
     {
       this.isLogged = true;
       this.role = localStorage.getItem('role');
+      this.activate = localStorage.getItem('activate');
     }
   }
 

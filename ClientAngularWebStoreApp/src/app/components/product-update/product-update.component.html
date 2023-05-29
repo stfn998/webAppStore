@@ -1,0 +1,165 @@
+<div class="container">
+    <div class="main-body">
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="main-breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a class="router-link" [routerLink]="['/home']">Home</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            Update product
+          </li>
+        </ol>
+      </nav>
+      <!-- /Breadcrumb -->
+  
+      <form [formGroup]="productForm" (ngSubmit)="onSaveChange(productForm)">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="card card-full-height">
+              <div class="card-body">
+                <div
+                  class="d-flex py-3 flex-column align-items-center text-center"
+                >
+                  <img
+                    *ngIf="product?.imageUrl" [src]="product?.imageUrl"
+                    alt="Product image"
+                    style="width: 150px; height: auto"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="card card-full-height">
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Name</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    <div class="input-field">
+                      <input
+                        formControlName="name"
+                        id="name"
+                        type="text"
+                        [value]="product?.name"
+                      />
+                    </div>
+                    <small
+                      *ngIf="name?.errors?.['required']"
+                      class="text-danger"
+                    >
+                      Name is requiered.
+                    </small>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Price</h6>
+                  </div>
+                <div class="col-sm-9 text-secondary">
+                  <div class="input-field">
+                    <input
+                      formControlName="price"
+                      id="price"
+                      type="number"
+                      [value]="product?.price"
+                      />
+                  </div>
+                    <small
+                        *ngIf="price?.errors?.['required']"
+                        class="text-danger"
+                    >
+                        Price is requiered.
+                    </small>
+                    <small
+                        *ngIf="price?.errors?.['min']"
+                        class="text-danger"
+                    >
+                        Enter a valid price greater than or equal to 1.
+                    </small>
+                </div>
+              </div>
+              <div class="row mb-3">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Description</h6>
+                  </div>
+                <div class="col-sm-9 text-secondary">
+                  <div class="input-field">
+                    <textarea
+                      formControlName="description"
+                      id="description"
+                      rows="3"
+                      [value]="product?.description"
+                    ></textarea>
+                  </div>
+                  <small
+                      *ngIf="description?.errors?.['required']"
+                      class="text-danger"
+                    >
+                      Description is requiered.
+                    </small>
+                </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Quantity</h6>
+                  </div>
+                <div class="col-sm-9 text-secondary">
+                  <div class="input-field">
+                    <input
+                      formControlName="quantity"
+                      id="quantity"
+                      type="number"
+                      [value]="product?.quantity"
+                    />
+                  </div>
+                  <small
+                        *ngIf="quantity?.errors?.['required']"
+                        class="text-danger"
+                    >
+                        Quantity is requiered.
+                    </small>
+                    <small
+                        *ngIf="quantity?.errors?.['min']"
+                        class="text-danger"
+                    >
+                        Enter a valid quantity greater than or equal to 1.
+                    </small>
+                </div>   
+                </div>                    
+                <div class="row mb-3">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Product picture</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    <div class="input-field">
+                      <input
+                        type="file"
+                        id="imageUrl"
+                        (change)="onFileSelected($event)"
+                        accept="image/*"
+                      />
+                    </div>
+                    <small *ngIf="imageUrl?.errors?.['required']" class="text-danger">
+                      Product image is required
+                    </small>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                      <button [disabled]="!productForm.valid" class="btn btn-primary btn-block mt-4 w-100">
+                          Update Product
+                      </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <ng-template #error></ng-template>
+  

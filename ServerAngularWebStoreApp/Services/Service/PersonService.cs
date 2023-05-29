@@ -167,6 +167,11 @@ namespace Services.Service
                 person.ImageUrl = imagePath;
                 isChanged = true;
             }
+            if (dto.ShippingCost != person.ShippingCost)
+            {
+                person.ShippingCost = dto.ShippingCost;
+                isChanged = true;
+            }
 
             if (isChanged)
             {

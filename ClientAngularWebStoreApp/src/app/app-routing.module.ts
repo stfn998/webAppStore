@@ -9,6 +9,10 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { AdminGuard } from './guards/admin.guard';
 import { VerificationComponent } from './components/verification/verification.component';
+import { ProductNewComponent } from './components/product-new/product-new.component';
+import { SellerGuard } from './guards/seller.guard';
+import { ProductListComponent } from './components/product-list/product-list.component';
+import { ProductUpdateComponent } from './components/product-update/product-update.component';
 
 const routes: Routes = [
   { path:'', component: LoginComponent, canActivate: [LoginGuard] },
@@ -16,7 +20,10 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [LoggedInGuard],
        children: [ { path: 'persons/:personId', component: UserProfileComponent, canActivate: [LoggedInGuard]}, 
                    { path: 'persons/edit/:personId', component: EditProfileComponent, canActivate: [LoggedInGuard]},
-                   { path: 'verification', component: VerificationComponent, canActivate: [AdminGuard]}]
+                   { path: 'products/new-product', component: ProductNewComponent, canActivate: [SellerGuard]},
+                   { path: 'products/edit/:productId', component: ProductUpdateComponent, canActivate: [SellerGuard]},
+                   { path: 'products/list-product', component: ProductListComponent, canActivate: [LoggedInGuard]},
+                   { path: 'persons/verification', component: VerificationComponent, canActivate: [AdminGuard]}]
   },
   { path:'**', redirectTo: '' },
 ];

@@ -18,6 +18,9 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { DatePipe } from '@angular/common';
 import { VerificationComponent } from './components/verification/verification.component';
+import { ProductNewComponent } from './components/product-new/product-new.component';
+import { ProductListComponent } from './components/product-list/product-list.component';
+import { ProductUpdateComponent } from './components/product-update/product-update.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,9 @@ import { VerificationComponent } from './components/verification/verification.co
     UserProfileComponent,
     EditProfileComponent,
     VerificationComponent,
+    ProductNewComponent,
+    ProductListComponent,
+    ProductUpdateComponent,
   ],
   imports: [
     BrowserModule,

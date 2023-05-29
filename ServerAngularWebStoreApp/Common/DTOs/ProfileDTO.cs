@@ -25,5 +25,6 @@ namespace Common.DTOs
 
         public string ImageUrl { get; set; }
         public string Birth { get; set; }
+        public float ShippingCost { get; set; } // New property
     }
 }

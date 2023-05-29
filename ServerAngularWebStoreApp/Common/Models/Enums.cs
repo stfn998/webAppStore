@@ -8,13 +8,6 @@ namespace Common.Models
 {
     public class Enums
     {
-        public enum OrderStatus
-        {
-            Accept,
-            OnHold,
-            Done
-        }
-
         public enum PersonType
         {
             Admin,

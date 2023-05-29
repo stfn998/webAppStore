@@ -28,5 +28,6 @@ namespace Common.DTOs
         public PersonType PersonType { get; set; }
         public bool DecisionMade { get; set; }
         public VerificationStatus Verification { get; set; }
+        public float ShippingCost { get; set; } // New property
     }
 }

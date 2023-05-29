@@ -36,12 +36,12 @@
                                     <div class="input-field"> 
                                         <input formControlName="userName" id="userName" type="text" [value]="person?.userName">  
                                     </div>
-                                    <div class="alert alert-danger" *ngIf="userName?.errors?.['required']">
-                                        Username is requiered.
-                                    </div>
-                                    <div class="alert alert-danger" *ngIf="userName?.errors?.['pattern']">
+                                    <small *ngIf="userName?.errors?.['required']" class="text-danger">
+                                        Name is requiered.
+                                    </small>
+                                    <small *ngIf="userName?.errors?.['pattern']" class="text-danger">
                                         Username can only contain alphanumeric characters.
-                                    </div>
+                                    </small>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -52,12 +52,12 @@
                                     <div class="input-field"> 
                                         <input formControlName="email" id="email" type="text" [value]="person?.email">  
                                     </div>    
-                                    <div class="alert alert-danger" *ngIf="email?.errors?.['required']">
-                                        Email is requiered.
-                                    </div>   
-                                    <div class="alert alert-danger" *ngIf="email?.errors?.['email']">
+                                    <small *ngIf="email?.errors?.['required']" class="text-danger">
+                                        Email is required.
+                                    </small>
+                                    <small *ngIf="email?.errors?.['email']" class="text-danger">
                                         Email format in incorrect.
-                                    </div>                        
+                                    </small>                     
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -68,9 +68,9 @@
                                     <div class="input-field"> 
                                         <input formControlName="firstName" id="firstName" type="text" [value]="person?.firstName">  
                                     </div>
-                                    <div class="alert alert-danger" *ngIf="firstName?.errors?.['required']">
+                                    <small *ngIf="firstName?.errors?.['required']" class="text-danger">
                                         First name is requiered.
-                                    </div>
+                                    </small>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -80,10 +80,10 @@
                                 <div class="col-sm-9 text-secondary">
                                     <div class="input-field"> 
                                         <input formControlName="lastName" id="lastName" type="text" [value]="person?.lastName">  
-                                    </div>    
-                                    <div class="alert alert-danger" *ngIf="lastName?.errors?.['required']">
+                                    </div>       
+                                    <small *ngIf="lastName?.errors?.['required']" class="text-danger">
                                         Last name is requiered.
-                                    </div>                            
+                                    </small>                       
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -94,12 +94,12 @@
                                     <div class="input-field">
                                         <input formControlName="birth" id="birth" type="text" [value]="person?.birth | date:'dd/MM/yyyy'">  
                                     </div> 
-                                    <div class="alert alert-danger" *ngIf="birth?.errors?.['required']">
+                                    <small *ngIf="birth?.errors?.['required']" class="text-danger">
                                         Date of birth is requiered.
-                                    </div> 
-                                    <div class="alert alert-danger" *ngIf="birth?.errors?.['pattern']">
+                                    </small>  
+                                    <small *ngIf="birth?.errors?.['pattern']" class="text-danger">
                                         Date is in invalid format (dd/MM/yyyy).
-                                    </div> 
+                                    </small>  
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -110,11 +110,27 @@
                                     <div class="input-field"> 
                                         <input formControlName="address" id="address" type="text" [value]="person?.address">  
                                     </div> 
-                                    <div class="alert alert-danger" *ngIf="address?.errors?.['required']">
+                                    <small *ngIf="address?.errors?.['required']" class="text-danger">
                                         Address is requiered.
-                                    </div> 
+                                    </small>
                                 </div>
                             </div>
+                            <div class="row mb-3" *ngIf="role === 'Seller'">
+                                <div class="col-sm-3">
+                                  <h6 class="mb-0">Shipping Cost</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                  <div class="input-field"> 
+                                    <input formControlName="shippingCost" id="shippingCost" min="0" step="0.01" type="number" [value]="person?.shippingCost">  
+                                  </div> 
+                                  <small *ngIf="shippingCost?.errors?.['required']" class="text-danger">
+                                    Shipping cost is required.
+                                  </small>
+                                  <small *ngIf="shippingCost?.errors?.['min']" class="text-danger">
+                                    Shipping cost must be greater than 0.
+                                  </small>
+                                </div>
+                            </div>                              
                             <div class="row mb-3">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">Profile picture</h6>
@@ -123,6 +139,9 @@
                                     <div class="input-field">
                                         <input type="file" id="imageUrl" (change)="onFileSelected($event)" accept="image/*">
                                     </div>
+                                    <small *ngIf="imageUrl?.errors?.['required']" class="text-danger">
+                                        Profile picture is required
+                                      </small>
                                 </div>                            
                             </div>
                             <div class="row">
