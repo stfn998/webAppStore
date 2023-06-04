@@ -5,6 +5,7 @@
 export const environment = {
   personServiceUrl:"https://localhost:7244",
   productServiceUrl:"https://localhost:7244",
+  orderServiceUrl:"https://localhost:7244",
   allowedDomains:['localhost:7244'], 
   production: false
 };

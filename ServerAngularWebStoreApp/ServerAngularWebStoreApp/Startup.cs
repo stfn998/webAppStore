@@ -110,7 +110,7 @@ namespace ServerAngularWebStoreApp
             services.AddScoped<IAdminService, AdminService>();
 
             services.AddScoped<IProductService, ProductService>();
-            //services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             var emailConfig = Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
             services.AddSingleton(emailConfig);

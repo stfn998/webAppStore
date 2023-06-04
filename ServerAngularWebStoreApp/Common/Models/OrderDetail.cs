@@ -8,5 +8,10 @@
         public Order Order { get; set; }
         public int Quantity { get; set; } // Quantity of this product in the order
         public float Price => Quantity * Product.Price;
+
+        public OrderDetail()
+        {
+            Quantity = 1;
+        }
     }
 }

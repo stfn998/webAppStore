@@ -13,6 +13,8 @@ import { ProductNewComponent } from './components/product-new/product-new.compon
 import { SellerGuard } from './guards/seller.guard';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductUpdateComponent } from './components/product-update/product-update.component';
+import { OrderCurrentComponent } from './components/order-current/order-current.component';
+import { UserGuard } from './guards/user.guard';
 
 const routes: Routes = [
   { path:'', component: LoginComponent, canActivate: [LoginGuard] },
@@ -20,10 +22,11 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [LoggedInGuard],
        children: [ { path: 'persons/:personId', component: UserProfileComponent, canActivate: [LoggedInGuard]}, 
                    { path: 'persons/edit/:personId', component: EditProfileComponent, canActivate: [LoggedInGuard]},
+                   { path: 'verification', component: VerificationComponent, canActivate: [AdminGuard]},
                    { path: 'products/new-product', component: ProductNewComponent, canActivate: [SellerGuard]},
                    { path: 'products/edit/:productId', component: ProductUpdateComponent, canActivate: [SellerGuard]},
                    { path: 'products/list-product', component: ProductListComponent, canActivate: [LoggedInGuard]},
-                   { path: 'persons/verification', component: VerificationComponent, canActivate: [AdminGuard]}]
+                   { path: 'orders/current-order', component: OrderCurrentComponent, canActivate: [UserGuard]}]
   },
   { path:'**', redirectTo: '' },
 ];

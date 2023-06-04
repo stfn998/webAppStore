@@ -10,9 +10,9 @@
               </a>
             </li>
             <li *ngIf="isLogged && role === 'Admin'">
-              <a class="nav-link" [routerLink]="['/home/persons/verification']">
+              <a class="nav-link" [routerLink]="['/home/verification']">
                 Verification
-                </a>
+              </a>
             </li>
             <li *ngIf="isLogged && role === 'Seller' && activate === 'Active'" >
               <a class="nav-link" [routerLink]="['/home/products/new-product']">
@@ -23,12 +23,18 @@
               <a class="nav-link" [routerLink]="['/home/products/list-product']">
                 All products
               </a>
-            </li>            
+            </li>         
             <li *ngIf="isLogged">
               <a class="nav-link" [routerLink]="['/']" (click)="logOut()">
                 Log out
               </a>
             </li>
+            <li *ngIf="isLogged && role === 'Customer'">
+              <button [routerLink]="['/home/orders/current-order']" class="btn btn-primary">
+                <i style="font-size: 30px;" class="fa fa-cart-plus"></i>
+                <div style="font-size: 10px;" class="badge bg-danger">0</div>
+              </button>
+            </li>   
           </ul>
         </div>
       </nav>

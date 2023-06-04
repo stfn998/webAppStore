@@ -1,6 +1,9 @@
 import { Component, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Order } from 'src/app/models/order.model';
+import { OrderDetail } from 'src/app/models/orderdetail.model';
 import { Product } from 'src/app/models/product.model';
+import { OrderService } from 'src/app/services/order.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -9,84 +12,27 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./product-list.component.scss']
 })
 export class ProductListComponent implements OnInit {
-  public products: Product[] = [];
-  role!: string |  null;
+  role?: string |  null;
 
-  imageUrlSafe!: SafeUrl;
-  image:Blob=new Blob();
+  public products?: Product[];
 
-  constructor(private productService: ProductService, private sanitizer: DomSanitizer) { 
+  constructor(public productService: ProductService) { 
 
     if(localStorage.getItem('token') !== null)
     {
         this.role = localStorage.getItem('role');
         if (localStorage.getItem('role') === "Seller")
-        {
-            this.productService.getProductsSeller(Number(localStorage.getItem('personId')))
-            .subscribe(products => {
-              if (products !== undefined) {
-                this.products = products;
-                this.loadImagesForProducts();
-                console.log(products);
-              }
-          });
-        }
+          {
+            this.productService.getProductsSeller(Number(localStorage.getItem('personId')));
+          }
         else
         {
-          this.productService.getProducts()
-          .subscribe(products => {
-            if (products !== undefined) {
-              this.products = products;
-              this.loadImagesForProducts();
-            }
-          });
+          this.productService.getProducts();
         }
-  }
-}
-
-  loadImagesForProducts(): void {
-    for (const product of this.products) {
-      this.productService.getImage(product.id)
-        .subscribe((response: any) => {
-          let reader = new FileReader();
-            reader.addEventListener("load", () => {
-              this.imageUrlSafe = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
-              if (product) {
-                product.imageUrl = this.sanitizer.sanitize(SecurityContext.URL, this.imageUrlSafe) ?? "";
-              }
-              }, false);
-
-            if (response) {
-              reader.readAsDataURL(response);
-            }
-        });
     }
   }
 
   ngOnInit(): void {
-  }
-
-  addToCart(id : number){
-
-  }
-
-  deleteProduct(id : number){
-      this.productService.deleteProduct(id)
-      .subscribe((data: boolean) => {
-        if (data) {
-          alert("Product is deleted successfully"); //moze i lepse
-          this.productService.getProductsSeller(Number(localStorage.getItem('personId')))
-            .subscribe(products => {
-              if (products !== undefined) {
-                this.products = products;
-                this.loadImagesForProducts();
-              }
-          });
-        }
-        else{
-          alert("Error while deleting a product") //moze i lepse
-        }
-    });
   }
 
 }

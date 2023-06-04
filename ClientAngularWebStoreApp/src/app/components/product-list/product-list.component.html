@@ -1,21 +1,7 @@
 <div class="product-grid">
-    <div class="product-card" *ngFor="let product of products">
-      <img [src]="product.imageUrl" alt="Product Image" class="product-image">
-      <h3 class="product-name">{{ product.name }}</h3>
-      <p class="product-price">{{ product.price | currency }}</p>
-      <p>{{ product.description }}</p>
-      <div class="product-buttons">
-        <button class="product-button" (click)="deleteProduct(product.id)" *ngIf="role === 'Seller'">
-            Delete
-        </button>
-        <button class="product-button" [routerLink]="['/home/products/edit/', product?.id]" *ngIf="role === 'Seller'">
-            Update
-        </button>
-        <button class="product-button" (click)="addToCart(product.id)" *ngIf="role === 'Customer'">
-            Add to cart
-        </button>
-      </div>
-    </div>
-  </div>
-  
-  
+  <app-product-card
+    *ngFor="let product of productService.products"
+    [product]="product"
+    [role]="role || ''"
+  ></app-product-card>
+</div>

@@ -11,11 +11,15 @@ namespace Services.IService
     {
         Task<bool> AddOrder(OrderDTO dto);
 
+        Task<int> CreateOrder(OrderDetailDTO dto);
+
+        Task<int> AddProduct(OrderDetailDTO dto);
+
+        Task<bool> RemoveProduct(OrderDetailDTO dto);
+
         Task<IEnumerable<OrderDTO>> GetAll();
 
         Task<OrderDTO> GetOne(int id);
-
-        Task<bool> OrderConfirmation(int idOrder);
 
         Task<IEnumerable<ProductDTO>> GetProductsFromOrder(int idOrder);
 

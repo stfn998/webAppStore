@@ -21,6 +21,10 @@ import { VerificationComponent } from './components/verification/verification.co
 import { ProductNewComponent } from './components/product-new/product-new.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductUpdateComponent } from './components/product-update/product-update.component';
+import { OrderCurrentComponent } from './components/order-current/order-current.component';
+import { PersonService } from './services/person.service';
+import { UserGuard } from './guards/user.guard';
+import { ProductCardComponent } from './components/product-card/product-card.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +39,8 @@ import { ProductUpdateComponent } from './components/product-update/product-upda
     ProductNewComponent,
     ProductListComponent,
     ProductUpdateComponent,
+    OrderCurrentComponent,
+    ProductCardComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,7 +56,7 @@ import { ProductUpdateComponent } from './components/product-update/product-upda
     DatePipe,
     {
       provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true
-    }
+    },
   ],
   bootstrap: [AppComponent]
 })

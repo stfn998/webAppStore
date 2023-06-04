@@ -164,7 +164,7 @@ namespace Services.Service
                 throw new KeyNotFoundException("No products.");
             }
 
-            IEnumerable<ProductDTO> productsDto = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products);
+            IEnumerable<ProductDTO> productsDto = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products).Where(p => p.Quantity > 0);
 
             return productsDto;
         }
