@@ -11,6 +11,7 @@ export interface Order{
     canCancel: boolean,
     shippingCost: number,
     idOrder: number,
+    totalPrice: number,
     orderDetails: OrderDetail[]
 }
 
@@ -24,5 +25,6 @@ export class Order {
     canCancel!: boolean;
     shippingCost!: number;
     idOrder!: number;
+    totalPrice!: number;
     orderDetails!: OrderDetail[];
 }

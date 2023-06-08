@@ -1,13 +1,13 @@
 export interface OrderDetail{ 
-    id: number,
-    idProduct: number,
-    idOrder: number,
+    customerId: number,
+    productId: number,
+    orderId: number,
     quantity: number
 }
 
 export class OrderDetail {
-    id!: number;
-    idProduct!: number;
-    idOrder!: number;
+    customerId!: number;
+    productId!: number;
+    orderId!: number;
     quantity!: number
 }

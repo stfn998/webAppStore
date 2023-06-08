@@ -25,6 +25,7 @@ import { OrderCurrentComponent } from './components/order-current/order-current.
 import { PersonService } from './services/person.service';
 import { UserGuard } from './guards/user.guard';
 import { ProductCardComponent } from './components/product-card/product-card.component';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,9 @@ import { ProductCardComponent } from './components/product-card/product-card.com
     CalendarModule,
     ReactiveFormsModule,
     HttpClientModule,
-    SocialLoginModule 
+    SocialLoginModule,
+    FormsModule,
+    InputNumberModule
   ],
   providers: [
     DatePipe,

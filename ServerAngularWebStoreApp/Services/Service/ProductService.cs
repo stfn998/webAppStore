@@ -14,11 +14,13 @@ namespace Services.Service
     public class ProductService : IProductService
     {
         private readonly IGenericRepository<Product> _genericRepository;
+        private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IMapper _mapper;
 
-        public ProductService(IGenericRepository<Product> genericRepository, IMapper mapper)
+        public ProductService(IGenericRepository<Product> genericRepository, IOrderDetailRepository orderDetailRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
+            _orderDetailRepository = orderDetailRepository;
             _mapper = mapper;
         }
 
@@ -181,6 +183,31 @@ namespace Services.Service
 
             // Filter products by SellerId
             productsDto = productsDto.Where(p => p.SellerId == idSeller);
+
+            return productsDto;
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetProductsInOrder(int idOrder)
+        {
+            var products = await _genericRepository.GetAll();
+            if (products == null)
+            {
+                throw new KeyNotFoundException("No products.");
+            }
+
+            IEnumerable<OrderDetail> orderDetailList = await _orderDetailRepository.GetByIdOrder(idOrder);
+            if (orderDetailList == null)
+            {
+                throw new KeyNotFoundException("Order does not exist");
+            }
+
+            // Get the product IDs from the order details
+            var productIds = orderDetailList.Select(od => od.ProductId).ToList();
+
+            // Filter products by matching IDs
+            var filteredProducts = products.Where(p => productIds.Contains(p.Id));
+
+            IEnumerable<ProductDTO> productsDto = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(filteredProducts);
 
             return productsDto;
         }

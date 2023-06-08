@@ -76,7 +76,7 @@ export class EditProfileComponent implements OnInit {
 
   private loadPerson() {
     const id = this.route.snapshot.paramMap.get('personId');
-    const getPersonSub = this.personService.getPerson(Number(id)).subscribe(result => {
+    this.personService.getPerson(Number(id)).subscribe(result => {
       this.person = result;
       this.isLogged = true;
       this.editForm.controls['userName'].setValue(this.person?.userName);

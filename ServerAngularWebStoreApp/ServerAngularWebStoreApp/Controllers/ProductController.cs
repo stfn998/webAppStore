@@ -75,6 +75,26 @@ namespace ServerAngularWebStoreApp.Controllers
             }
         }
 
+        [Authorize("Customer")]
+        [HttpGet]
+        [Route("order/{idOrder}")]
+        public async Task<IActionResult> GetProductsInOrder(int idOrder)
+        {
+            try
+            {
+                var products = await _productService.GetProductsInOrder(idOrder);
+                return Ok(products);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Something went wrong." });
+            }
+        }
+
         [HttpGet]
         [Route("{idProduct}")]
         public async Task<IActionResult> GetProduct(int idProduct)

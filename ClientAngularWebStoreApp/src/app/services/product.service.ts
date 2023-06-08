@@ -1,5 +1,5 @@
 import { Injectable, SecurityContext } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Product } from '../models/product.model';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -16,20 +16,34 @@ export class ProductService {
   image:Blob=new Blob();
 
   constructor(private http: HttpClient, router: Router, private sanitizer: DomSanitizer) { 
+    if(localStorage.getItem('products') !== null)
+    {
+      const item = localStorage.getItem('products');
+      const products = JSON.parse(item!);
+      this.products = products;
+    }
   }
 
-  public getProducts() {
-    this.http.get<Product[]>(environment.productServiceUrl + '/api/product').subscribe((products) => {
-      this.products = products;
-      this.loadImagesForProducts();
-    });
+  public getProducts() : Observable<Product[]>{
+    return this.http.get<Product[]>(environment.productServiceUrl + '/api/product').pipe(
+      tap((response: Product[]) => {
+        this.products = response;
+        this.loadImagesForProducts();
+        localStorage.setItem('products',JSON.stringify(this.products));
+      }));
   }
 
-  public getProductsSeller(idSeller: number) {
-    this.http.get<Product[]>(environment.productServiceUrl + '/api/product/seller/' + idSeller).subscribe((products) => {
-      this.products = products;
-      this.loadImagesForProducts();
-    });
+  public getProductsSeller(idSeller: number) : Observable<Product[]>{
+    return this.http.get<Product[]>(environment.productServiceUrl + '/api/product/seller/' + idSeller).pipe(
+      tap((response: Product[]) => {
+        this.products = response;
+        this.loadImagesForProducts();
+        localStorage.setItem('products',JSON.stringify(this.products));
+      }));
+  }
+
+  public getProductsInOrder(idOrder: number) : Observable<Product[]>{
+    return this.http.get<Product[]>(environment.productServiceUrl + '/api/product/order/' + idOrder);
   }
 
   public addProduct(data : any) {

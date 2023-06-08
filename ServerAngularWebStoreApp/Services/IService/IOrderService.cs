@@ -1,4 +1,5 @@
 ﻿using Common.DTOs;
+using Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +12,15 @@ namespace Services.IService
     {
         Task<bool> AddOrder(OrderDTO dto);
 
-        Task<int> CreateOrder(OrderDetailDTO dto);
+        Task<OrderDetailDTO> CreateOrder(OrderDetailDTO dto);
 
-        Task<int> AddProduct(OrderDetailDTO dto);
+        Task<OrderDetailDTO> AddProduct(OrderDetailDTO dto);
 
         Task<bool> RemoveProduct(OrderDetailDTO dto);
 
         Task<IEnumerable<OrderDTO>> GetAll();
 
-        Task<OrderDTO> GetOne(int id);
+        Task<OrderDTO> GetOrder(int idOrder);
 
         Task<IEnumerable<ProductDTO>> GetProductsFromOrder(int idOrder);
 

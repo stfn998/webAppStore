@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { OrderService } from 'src/app/services/order.service';
 
 @Component({
   selector: 'app-navigation',
@@ -11,7 +12,7 @@ export class NavigationComponent implements OnInit {
   public activate!: string | null ;
   role!: string |  null;
 
-  constructor() { 
+  constructor(public orderService: OrderService) { 
     this.checkToken();
   }
 
@@ -29,6 +30,7 @@ export class NavigationComponent implements OnInit {
     localStorage.removeItem('personId');
     localStorage.removeItem('role');
     localStorage.removeItem('activate');
+    localStorage.removeItem('order');
   }
 
   checkToken() {

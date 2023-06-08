@@ -26,7 +26,7 @@ const routes: Routes = [
                    { path: 'products/new-product', component: ProductNewComponent, canActivate: [SellerGuard]},
                    { path: 'products/edit/:productId', component: ProductUpdateComponent, canActivate: [SellerGuard]},
                    { path: 'products/list-product', component: ProductListComponent, canActivate: [LoggedInGuard]},
-                   { path: 'orders/current-order', component: OrderCurrentComponent, canActivate: [UserGuard]}]
+                   { path: 'order', component: OrderCurrentComponent, canActivate: [UserGuard]}]
   },
   { path:'**', redirectTo: '' },
 ];

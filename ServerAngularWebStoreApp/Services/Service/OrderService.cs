@@ -16,16 +16,18 @@ namespace Services.Service
         private readonly IGenericRepository<Product> _genericRepositoryProduct;
         private readonly IGenericRepository<Order> _genericRepositoryOrder;
         private readonly IGenericRepository<OrderDetail> _genericRepositoryOrderDetail;
+        private readonly IGenericRepository<Person> _genericRepositoryPerson;
         private readonly IOrderRepository _orderRepository;
         private readonly IProductRepository _productRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IMapper _mapper;
 
-        public OrderService(IGenericRepository<Product> genericRepositoryProduct, IGenericRepository<Order> genericRepositoryOrder, IGenericRepository<OrderDetail> genericRepositoryOrderDetail, IOrderRepository orderRepository, IProductRepository productRepository, IOrderDetailRepository orderDetailRepository, IMapper mapper)
+        public OrderService(IGenericRepository<Product> genericRepositoryProduct, IGenericRepository<Order> genericRepositoryOrder, IGenericRepository<Person> genericRepositoryPerson, IGenericRepository<OrderDetail> genericRepositoryOrderDetail, IOrderRepository orderRepository, IProductRepository productRepository, IOrderDetailRepository orderDetailRepository, IMapper mapper)
         {
             _genericRepositoryProduct = genericRepositoryProduct;
             _genericRepositoryOrder = genericRepositoryOrder;
             _genericRepositoryOrderDetail = genericRepositoryOrderDetail;
+            _genericRepositoryPerson = genericRepositoryPerson;
             _orderRepository = orderRepository;
             _productRepository = productRepository;
             _orderDetailRepository = orderDetailRepository;
@@ -223,14 +225,13 @@ namespace Services.Service
             return dto;
         }
 
-        public async Task<int> CreateOrder(OrderDetailDTO dto)
+        public async Task<OrderDetailDTO> CreateOrder(OrderDetailDTO dto)
         {
             OrderDetail orderDetail = _mapper.Map<OrderDetail>(dto);
 
             Order order = new Order()
             {
                 CustomerId = dto.CustomerId,
-                DeliveryAddress = ""
             };
 
             if (orderDetail == null || order == null)
@@ -244,10 +245,30 @@ namespace Services.Service
             await _genericRepositoryOrder.Insert(order);
             await _genericRepositoryOrder.Save();
 
-            return order.Id;
+            Product product = await _genericRepositoryProduct.GetByObject(dto.ProductId);
+            Person seller = await _genericRepositoryPerson.GetByObject(product.SellerId);
+
+            if (product == null && seller == null)
+            {
+                throw new KeyNotFoundException("Adding new order failed");
+            }
+
+            product.Seller = seller;
+            order.OrderDetails.FirstOrDefault().Product = product;
+
+            orderDetail.OrderId = order.Id;
+            order.ShippingCost = order.SellersShippingCosts.Values.Sum();
+
+            await _genericRepositoryOrder.Update(order);
+            await _genericRepositoryOrder.Save();
+
+            dto = _mapper.Map<OrderDetailDTO>(orderDetail);
+
+            dto.CustomerId = order.CustomerId;
+            return dto;
         }
 
-        public async Task<int> AddProduct(OrderDetailDTO dto)
+        public async Task<OrderDetailDTO> AddProduct(OrderDetailDTO dto)
         {
             OrderDetail orderDetail = _mapper.Map<OrderDetail>(dto);
 
@@ -261,10 +282,53 @@ namespace Services.Service
             orderDetail.Quantity = 1;
             order.OrderDetails.Add(orderDetail);
 
-            await _genericRepositoryOrder.Update(order);
-            await _genericRepositoryOrder.Save();
+            IEnumerable<OrderDetail> orderDetailList = await _orderDetailRepository.GetByIdOrder(order.Id);
+            if (orderDetailList == null)
+            {
+                throw new KeyNotFoundException("Order does not exist");
+            }
 
-            return order.Id;
+            foreach (OrderDetail orderDetail2 in orderDetailList)
+            {
+                order.OrderDetails.Add(orderDetail2);
+            }
+            int i = 0;
+
+            foreach (OrderDetail orderDetail3 in order.OrderDetails.ToList())
+            {
+                Product product = await _genericRepositoryProduct.GetByObject(orderDetail3.ProductId);
+                Person seller = await _genericRepositoryPerson.GetByObject(product.SellerId);
+
+                if (product == null && seller == null)
+                {
+                    throw new KeyNotFoundException("Adding new order failed");
+                }
+
+                product.Seller = seller;
+                order.OrderDetails.ToList()[i].Product = product;
+                i++;
+            }
+
+            orderDetail.OrderId = order.Id;
+            order.ShippingCost = order.SellersShippingCosts.Values.Sum();
+
+            foreach (OrderDetail orderDetail2 in orderDetailList)
+            {
+                order.OrderDetails.Remove(orderDetail2);
+            }
+
+            await _genericRepositoryOrder.Update(order);
+            try
+            {
+                await _genericRepositoryOrder.Save();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            dto = _mapper.Map<OrderDetailDTO>(orderDetail);
+
+            return dto;
         }
 
         public async Task<bool> RemoveProduct(OrderDetailDTO dto)
@@ -277,17 +341,70 @@ namespace Services.Service
 
             OrderDetail orderDetail = orderDetailList.FirstOrDefault(o => o.ProductId.Equals(dto.ProductId));
 
-            if (orderDetail == null)
+            Order order = await _genericRepositoryOrder.GetByObject(orderDetail.OrderId);
+
+            if (orderDetail == null || order == null)
             {
                 throw new KeyNotFoundException("Product does not exist.");
             }
-            else
+
+            foreach (OrderDetail orderDetail2 in orderDetailList)
             {
-                await _genericRepositoryOrderDetail.Delete(orderDetail);
-                await _genericRepositoryOrderDetail.Save();
+                order.OrderDetails.Add(orderDetail2);
+            }
+            int i = 0;
+
+            foreach (OrderDetail orderDetail3 in order.OrderDetails.ToList())
+            {
+                Product product = await _genericRepositoryProduct.GetByObject(orderDetail3.ProductId);
+                Person seller = await _genericRepositoryPerson.GetByObject(product.SellerId);
+
+                if (product == null && seller == null)
+                {
+                    throw new KeyNotFoundException("Adding new order failed");
+                }
+
+                product.Seller = seller;
+                order.OrderDetails.ToList()[i].Product = product;
+                i++;
+            }
+
+            order.OrderDetails.Remove(orderDetail);
+            orderDetailList.ToList().Remove(orderDetail);
+            order.ShippingCost = order.SellersShippingCosts.Values.Sum();
+
+            await _genericRepositoryOrderDetail.Delete(orderDetail);
+            await _genericRepositoryOrderDetail.Save();
+
+            foreach (OrderDetail orderDetail2 in orderDetailList)
+            {
+                order.OrderDetails.Remove(orderDetail2);
+            }
+
+            await _genericRepositoryOrder.Update(order);
+            try
+            {
+                await _genericRepositoryOrder.Save();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
 
             return true;
+        }
+
+        public async Task<OrderDTO> GetOrder(int idOrder)
+        {
+            Order order = await _genericRepositoryOrder.GetByObject(idOrder);
+            if (order == null)
+            {
+                throw new KeyNotFoundException("Order does not exist.");
+            }
+
+            OrderDTO dto = _mapper.Map<OrderDTO>(order);
+
+            return dto;
         }
     }
 }

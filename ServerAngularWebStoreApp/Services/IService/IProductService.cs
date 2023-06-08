@@ -13,6 +13,8 @@ namespace Services.IService
 
         Task<IEnumerable<ProductDTO>> GetAllProductSeller(int idSeller);
 
+        Task<IEnumerable<ProductDTO>> GetProductsInOrder(int idOrder);
+
         Task<bool> AddProduct(ProductDTO dto);
 
         Task<bool> UpdateProduct(ProductDTO dto);

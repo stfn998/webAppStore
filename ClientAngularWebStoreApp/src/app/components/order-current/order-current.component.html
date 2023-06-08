@@ -1,1 +1,46 @@
-<p>order-current works!</p>
+<h3>Current order</h3>
+<div *ngIf="order; else errorMessage">
+  <form [formGroup]="orderForm">
+    <div class="form-group pt-3">
+      <div class="input-field" [class.error]="orderForm.controls['address'].dirty && orderForm.hasError('required','address')" > 
+          <span class="fa fa-map-marker p-2"></span> 
+          <input formControlName="address" type="text" placeholder="Delivery address"> 
+      </div>
+    </div>
+    <small *ngIf="orderForm.controls['address'].dirty && orderForm.hasError('required','address')" class="text-danger">
+        *Delivery address is required
+    </small>
+    <div class="form-group pt-3">
+      <hr />
+      <h4>Your order</h4>
+      <table class="table">
+        <tbody>
+          <tr *ngFor="let product of products">
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.description }}</td>
+            <td>
+              <p-inputNumber type="number" [min]="1" [max]="product.quantity" (onClear)="quantityChange($event.value,product)" (onInput)="quantityChange($event.value,product)"> </p-inputNumber>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="!(products!.length > 0)">No products in the order.</div>
+    </div>
+    <h4>
+      Total price with <b>{{ order.shippingCost | currency }}</b> for delivery: <b>{{ order.shippingCost + order.totalPrice | currency }}</b>
+    </h4>
+    <hr />
+    <div class="form-group pt-3">
+      <div class="input-field"> 
+          <span class="fa fa-comment p-2"></span> 
+          <input formControlName="comment" type="text" placeholder="Comment"> 
+      </div>
+    </div>
+    <button (click)="submitOrder()" type="submit" class="btn btn-primary btn-block mt-4 w-100">
+        Submit order
+    </button>
+  </form>
+</div>
+<br />
+<ng-template #errorMessage><h3>No current order.</h3></ng-template>

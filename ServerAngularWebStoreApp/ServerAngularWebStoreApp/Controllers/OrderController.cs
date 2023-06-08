@@ -1,4 +1,5 @@
 ﻿using Common.DTOs;
+using Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.IService;
@@ -96,26 +97,6 @@ namespace ServerAngularWebStoreApp.Controllers
             }
         }
 
-        [Authorize]
-        [HttpGet]
-        [Route("{id}")]
-        public async Task<IActionResult> GetOneOrder(int id)
-        {
-            try
-            {
-                //OrderDTO dto = await _orderService.GetOne(id);
-                return Ok();
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new { message = "Something went wrong." });
-            }
-        }
-
         [Authorize("Customer,Deliverer")]
         [HttpGet]
         [Route("{IdCustomer}/current")]
@@ -178,17 +159,17 @@ namespace ServerAngularWebStoreApp.Controllers
         [Route("")]
         public async Task<IActionResult> CreateOrder([FromBody] OrderDetailDTO request)
         {
-            int orderId = -1;
+            OrderDetailDTO orderDetail;
             try
             {
-                orderId = await _orderService.CreateOrder(request);
+                orderDetail = await _orderService.CreateOrder(request);
             }
             catch (Exception e)
             {
                 return BadRequest();
             }
 
-            return Ok(orderId);
+            return Ok(orderDetail);
         }
 
         [Authorize("Customer")]
@@ -196,17 +177,17 @@ namespace ServerAngularWebStoreApp.Controllers
         [Route("")]
         public async Task<IActionResult> AddProduct([FromBody] OrderDetailDTO request)
         {
-            int orderId = -1;
+            OrderDetailDTO orderDetail;
             try
             {
-                orderId = await _orderService.AddProduct(request);
+                orderDetail = await _orderService.AddProduct(request);
             }
             catch (Exception e)
             {
                 return BadRequest();
             }
 
-            return Ok(orderId);
+            return Ok(orderDetail);
         }
 
         [Authorize("Customer")]
@@ -225,6 +206,26 @@ namespace ServerAngularWebStoreApp.Controllers
             }
 
             return Ok(productRemoved);
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("{idOrder}")]
+        public async Task<IActionResult> GetOrder(int idOrder)
+        {
+            try
+            {
+                OrderDTO dto = await _orderService.GetOrder(idOrder);
+                return Ok(dto);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Something went wrong." });
+            }
         }
     }
 }

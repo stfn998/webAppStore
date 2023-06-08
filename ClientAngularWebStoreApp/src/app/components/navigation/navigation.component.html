@@ -30,7 +30,7 @@
               </a>
             </li>
             <li *ngIf="isLogged && role === 'Customer'">
-              <button [routerLink]="['/home/orders/current-order']" class="btn btn-primary">
+              <button [routerLink]="['/home/order']" class="btn btn-primary">
                 <i style="font-size: 30px;" class="fa fa-cart-plus"></i>
                 <div style="font-size: 10px;" class="badge bg-danger">0</div>
               </button>
