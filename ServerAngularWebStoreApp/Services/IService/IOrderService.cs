@@ -18,13 +18,19 @@ namespace Services.IService
 
         Task<bool> RemoveProduct(OrderDetailDTO dto);
 
+        Task<bool> FinalizeOrder(OrderDTO dto);
+
+        Task<bool> DeleteOrder(int orderId);
+
+        Task<bool> CancelOrder(OrderDTO dto);
+
         Task<IEnumerable<OrderDTO>> GetAll();
 
         Task<OrderDTO> GetOrder(int idOrder);
 
         Task<IEnumerable<ProductDTO>> GetProductsFromOrder(int idOrder);
 
-        Task<IEnumerable<OrderDTO>> GetOrdersByIdCustomer(int idPerson);
+        Task<IEnumerable<OrderDTO>> GetOrdersByIdCustomer(int idPerson, int idCurrentOrder);
 
         Task<IEnumerable<OrderDTO>> GetOrdersByIdDeliverer(int idPerson);
 

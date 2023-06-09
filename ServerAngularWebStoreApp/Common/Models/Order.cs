@@ -43,8 +43,8 @@ namespace Common.Models
             CanCancel = true; // All orders can initially be cancelled
             DeliveryAddress = "";
             Comment = "";
-            OrderDate = DateTime.Now;
-            DeliveryTime = OrderDate.AddHours(new Random().Next(2, 24)); // Random delivery time greater than 1 hour from the order date
+            //OrderDate = DateTime.Now;
+            //DeliveryTime = OrderDate.AddHours(new Random().Next(2, 24)); // Random delivery time greater than 1 hour from the order date
         }
     }
 }

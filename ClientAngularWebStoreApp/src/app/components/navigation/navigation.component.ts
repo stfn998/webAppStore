@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Order } from 'src/app/models/order.model';
 import { OrderService } from 'src/app/services/order.service';
 
 @Component({
@@ -12,7 +14,7 @@ export class NavigationComponent implements OnInit {
   public activate!: string | null ;
   role!: string |  null;
 
-  constructor(public orderService: OrderService) { 
+  constructor(public orderService: OrderService, private router: Router) { 
     this.checkToken();
   }
 
@@ -26,11 +28,24 @@ export class NavigationComponent implements OnInit {
   }
 
   logOut() {
+    if(localStorage.getItem('order'))
+    {
+      const item = localStorage.getItem('order');
+      const order : Order = JSON.parse(item!);
+      this.orderService.deleteOrder(Number(order.id)).subscribe((ifDeleted : boolean) => {
+        if (ifDeleted)
+        {
+          localStorage.removeItem('order');         
+          this.router.navigateByUrl(''); 
+        }
+      });
+    }
     localStorage.removeItem('token');
     localStorage.removeItem('personId');
     localStorage.removeItem('role');
     localStorage.removeItem('activate');
-    localStorage.removeItem('order');
+    localStorage.removeItem('products');        
+    this.router.navigateByUrl(''); 
   }
 
   checkToken() {

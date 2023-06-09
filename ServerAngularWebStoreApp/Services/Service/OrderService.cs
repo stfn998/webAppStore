@@ -143,7 +143,7 @@ namespace Services.Service
             return true;
         }
 
-        public async Task<IEnumerable<OrderDTO>> GetOrdersByIdCustomer(int idPerson)
+        public async Task<IEnumerable<OrderDTO>> GetOrdersByIdCustomer(int idPerson, int currentOrderId)
         {
             List<Product> products = new List<Product>();
             IEnumerable<Order> orders = await _orderRepository.GetOrdersByIdCustomer(idPerson);
@@ -151,21 +151,20 @@ namespace Services.Service
             {
                 throw new KeyNotFoundException("User does not have orders.");
             }
+            orders = orders.Where(o => o.Id != currentOrderId);
 
             IEnumerable<OrderDTO> ordersDto = _mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(orders);
-            /*foreach (OrderDTO oDto in ordersDto)
+            foreach (OrderDTO oDto in ordersDto)
             {
-                IEnumerable<OrderProduct> op = await _orderProductRepository.GetByIdOrder(oDto.Id);
-                foreach (OrderProduct opp in op)
+                IEnumerable<OrderDetail> od = await _orderDetailRepository.GetByIdOrder(oDto.Id);
+                int i = 0;
+                foreach (OrderDetail odd in od)
                 {
-                    if (oDto.Id == opp.IdOrder)
-                    {
-                        products.Add(await _genericRepositoryProduct.GetByObject(opp.IdProduct));
-                    }
+                    oDto.OrderDetails.Add(_mapper.Map<OrderDetailDTO>(odd));
+                    oDto.OrderDetails[i].CustomerId = idPerson;
+                    i++;
                 }
-                oDto.Products = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products);
-                products.Clear();
-            }*/
+            }
 
             return ordersDto;
         }
@@ -327,6 +326,7 @@ namespace Services.Service
                 throw ex;
             }
             dto = _mapper.Map<OrderDetailDTO>(orderDetail);
+            dto.CustomerId = order.CustomerId;
 
             return dto;
         }
@@ -405,6 +405,79 @@ namespace Services.Service
             OrderDTO dto = _mapper.Map<OrderDTO>(order);
 
             return dto;
+        }
+
+        public async Task<bool> FinalizeOrder(OrderDTO dto)
+        {
+            Order order = _mapper.Map<Order>(dto);
+            if (order == null)
+            {
+                throw new KeyNotFoundException("Order does not exist.");
+            }
+
+            IEnumerable<OrderDetail> orderDetailList = await _orderDetailRepository.GetByIdOrder(dto.Id);
+
+            foreach (OrderDetail orderDetail in order.OrderDetails)
+            {
+                if (orderDetailList.Any(od => od.OrderId == orderDetail.OrderId && od.ProductId == orderDetail.ProductId))
+                {
+                    await _genericRepositoryOrderDetail.Update(orderDetail);
+                    await _genericRepositoryOrderDetail.Save();
+                }
+
+                Product product = await _genericRepositoryProduct.GetByObject(orderDetail.ProductId);
+                product.Quantity -= orderDetail.Quantity;
+
+                await _genericRepositoryProduct.Update(product);
+                await _genericRepositoryProduct.Save();
+            }
+
+            order.OrderDate = DateTime.Now;
+            order.DeliveryTime = order.OrderDate.AddHours(new Random().Next(2, 24)); // Random delivery time greater than 1 hour from the order date
+
+            await _genericRepositoryOrder.Update(order);
+            await _genericRepositoryOrder.Save();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteOrder(int orderId)
+        {
+            Order order = await _genericRepositoryOrder.GetByObject(orderId);
+            if (order == null)
+            {
+                throw new KeyNotFoundException("Order does not exist.");
+            }
+
+            await _genericRepositoryOrder.Delete(order);
+            await _genericRepositoryOrder.Save();
+
+            return true;
+        }
+
+        public async Task<bool> CancelOrder(OrderDTO dto)
+        {
+            foreach (OrderDetailDTO orderDetail in dto.OrderDetails)
+            {
+                Product product = await _genericRepositoryProduct.GetByObject(orderDetail.ProductId);
+                product.Quantity += orderDetail.Quantity;
+
+                await _genericRepositoryProduct.Update(product);
+                await _genericRepositoryProduct.Save();
+            }
+
+            Order order = await _genericRepositoryOrder.GetByObject(dto.Id);
+            if (order == null)
+            {
+                throw new KeyNotFoundException("Order does not exist.");
+            }
+
+            order.CanCancel = false;
+
+            await _genericRepositoryOrder.Update(order);
+            await _genericRepositoryOrder.Save();
+
+            return true;
         }
     }
 }

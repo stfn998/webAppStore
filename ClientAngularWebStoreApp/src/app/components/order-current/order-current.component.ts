@@ -71,10 +71,13 @@ export class OrderCurrentComponent implements OnInit {
   }
 
   submitOrder(){
-    if (this.orderForm.valid){
-        this.orderService.saveOrder(Number(this.order?.id), this.orderForm.value)
+    if (this.orderForm.valid && this.order){
+        this.order.deliveryAddress = this.orderForm.get('address')?.value;
+        this.order.comment = this.orderForm.get('comment')?.value
+        this.orderService.saveOrder(Number(this.order?.id), this.order)
           .subscribe(() => {
             this.orderForm.reset();
+            localStorage.removeItem('order');         
             this.router.navigateByUrl('');
             alert("Your order has been submitted.") //moze i lepse
           });

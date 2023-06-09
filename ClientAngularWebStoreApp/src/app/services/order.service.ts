@@ -93,8 +93,13 @@ export class OrderService {
       }));
   }
   
-  saveOrder(idOrder: number | null, data: any) : Observable<OrderDetail> {
-    return this.http.put<OrderDetail>(environment.orderServiceUrl + '/api/order' + idOrder, data);
+  saveOrder(idOrder: number | null, order : Order) : Observable<OrderDetail> {
+    console.log(order);
+    return this.http.put<OrderDetail>(environment.orderServiceUrl + '/api/order/' + idOrder, order);
+  }
+
+  public deleteOrder(orderId: number): Observable<boolean> {
+    return this.http.delete<boolean>(environment.orderServiceUrl + '/api/order/' + orderId);
   }
 
   getOrder(id: number): Observable<Order> {
@@ -102,10 +107,21 @@ export class OrderService {
       .get<Order>(environment.orderServiceUrl + '/api/order/' + id);
   }
 
+  cancelOrder(order : Order) : Observable<boolean> {
+    return this.http.put<boolean>(environment.orderServiceUrl + '/api/order/cancel', order);
+  }
+
+  public getOrders(idPerson: Number, currentOrderId: Number): Observable<Order[]> {
+    const params = {
+      currentOrderId: currentOrderId.toString()
+    };
+    return this.http.get<Order[]>(`${environment.orderServiceUrl}/api/order/${idPerson}/orders`, { params });
+  }
+
   async createOrder(orderDetail: OrderDetail): Promise<void> {
     this.order = {
       id: orderDetail.orderId.toString(),
-      idCustomer: orderDetail.customerId,
+      customerId: orderDetail.customerId,
       deliveryAddress: '',
       comment: '',
       orderDate: '',

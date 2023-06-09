@@ -15,6 +15,7 @@ import { ProductListComponent } from './components/product-list/product-list.com
 import { ProductUpdateComponent } from './components/product-update/product-update.component';
 import { OrderCurrentComponent } from './components/order-current/order-current.component';
 import { UserGuard } from './guards/user.guard';
+import { OrderListComponent } from './components/order-list/order-list.component';
 
 const routes: Routes = [
   { path:'', component: LoginComponent, canActivate: [LoginGuard] },
@@ -26,7 +27,8 @@ const routes: Routes = [
                    { path: 'products/new-product', component: ProductNewComponent, canActivate: [SellerGuard]},
                    { path: 'products/edit/:productId', component: ProductUpdateComponent, canActivate: [SellerGuard]},
                    { path: 'products/list-product', component: ProductListComponent, canActivate: [LoggedInGuard]},
-                   { path: 'order', component: OrderCurrentComponent, canActivate: [UserGuard]}]
+                   { path: 'order', component: OrderCurrentComponent, canActivate: [UserGuard]},
+                   { path: 'order/order-list', component: OrderListComponent, canActivate: [UserGuard]},]
   },
   { path:'**', redirectTo: '' },
 ];

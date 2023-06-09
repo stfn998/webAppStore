@@ -1,13 +1,13 @@
 export interface OrderDetail{ 
-    customerId: number,
     productId: number,
     orderId: number,
+    customerId: number,
     quantity: number
 }
 
 export class OrderDetail {
-    customerId!: number;
     productId!: number;
     orderId!: number;
+    customerId!: number;
     quantity!: number
 }

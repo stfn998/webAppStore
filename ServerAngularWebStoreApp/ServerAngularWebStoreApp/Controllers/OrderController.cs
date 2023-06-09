@@ -17,26 +17,6 @@ namespace ServerAngularWebStoreApp.Controllers
             _orderService = orderService;
         }
 
-        [Authorize]
-        [HttpGet]
-        [Route("")]
-        public async Task<IActionResult> GetAllOrders()
-        {
-            try
-            {
-                //IEnumerable<OrderDTO> orders = await _orderService.GetAll();
-                return Ok();
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new { message = "Something went wrong." });
-            }
-        }
-
         [Authorize("Deliverer")]
         [HttpGet]
         [Route("complated-orders")]
@@ -45,26 +25,6 @@ namespace ServerAngularWebStoreApp.Controllers
             try
             {
                 //IEnumerable<OrderDTO> orders = await _orderService.GetOrdersByStatus(Enums.OrderStatus.Done);
-                return Ok();
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new { message = "Something went wrong." });
-            }
-        }
-
-        [Authorize("Customer")]
-        [HttpGet]
-        [Route("{idPerson}/orders")]
-        public async Task<IActionResult> GetOrdersByIdCustomer(int idPerson)
-        {
-            try
-            {
-                //IEnumerable<OrderDTO> orders = await _orderService.GetOrdersByIdCustomer(idPerson);
                 return Ok();
             }
             catch (KeyNotFoundException ex)
@@ -208,7 +168,7 @@ namespace ServerAngularWebStoreApp.Controllers
             return Ok(productRemoved);
         }
 
-        [Authorize]
+        [Authorize("Customer")]
         [HttpGet]
         [Route("{idOrder}")]
         public async Task<IActionResult> GetOrder(int idOrder)
@@ -226,6 +186,79 @@ namespace ServerAngularWebStoreApp.Controllers
             {
                 return BadRequest(new { message = "Something went wrong." });
             }
+        }
+
+        [Authorize("Customer")]
+        [HttpPut]
+        [Route("{idOrder}")]
+        public async Task<IActionResult> SaveOrder(int idOrder, [FromBody] OrderDTO dto)
+        {
+            bool finalizeOrder = false;
+            try
+            {
+                finalizeOrder = await _orderService.FinalizeOrder(dto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+
+            return Ok(finalizeOrder);
+        }
+
+        [Authorize("Customer")]
+        [HttpDelete]
+        [Route("{idOrder}")]
+        public async Task<IActionResult> DeleteOrder(int idOrder)
+        {
+            bool isDeleted = false;
+            try
+            {
+                isDeleted = await _orderService.DeleteOrder(idOrder);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+
+            return Ok(isDeleted);
+        }
+
+        [Authorize("Customer")]
+        [HttpGet("{idPerson}/orders")]
+        public async Task<IActionResult> GetOrdersByIdCustomer(int idPerson, [FromQuery] int currentOrderId)
+        {
+            try
+            {
+                IEnumerable<OrderDTO> orders = await _orderService.GetOrdersByIdCustomer(idPerson, currentOrderId);
+                return Ok(orders);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Something went wrong." });
+            }
+        }
+
+        [Authorize("Customer")]
+        [HttpPut]
+        [Route("cancel")]
+        public async Task<IActionResult> CancelOrder(OrderDTO dto)
+        {
+            bool orderCanceled = false;
+            try
+            {
+                orderCanceled = await _orderService.CancelOrder(dto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+
+            return Ok(orderCanceled);
         }
     }
 }

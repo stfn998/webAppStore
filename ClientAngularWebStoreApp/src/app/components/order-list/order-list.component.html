@@ -1,0 +1,44 @@
+<h2>My orders</h2>
+<hr />
+<table class="table">
+    <thead class="thead-light">
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Address</th>
+          <th scope="col">Comment</th>
+          <th scope="col">Order date</th>
+          <th scope="col">Delivery date</th>
+          <th scope="col">Remaining time</th>
+          <th scope="col">Total price</th>
+          <th scope="col">Order status</th>
+          <th scope="col">Cancel order</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let order of orders">
+          <td>{{ order.id }}</td>
+          <td>{{ order.deliveryAddress }}</td>
+          <td>{{ order.comment }}</td>
+          <td>{{ order.orderDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ order.deliveryTime | date : 'dd/MM/yyyy HH:mm' }}</td>
+          <td class="remaining-time">{{ getRemainingTime(order) }}</td>
+          <td>{{ order.totalPrice + order.shippingCost}}</td>
+          <td>
+            <ng-container *ngIf="!order.canCancel">
+              Cancelled
+            </ng-container>
+            <ng-container *ngIf="order.canCancel && isOrderDelivered(order)">
+              Delivered
+            </ng-container>
+            <ng-container *ngIf="order.canCancel && !isOrderDelivered(order)">
+              In Delivery
+            </ng-container>
+          </td>
+          <td>
+            <button [disabled]="shouldDisableCancel(order) || !order.canCancel" [ngClass]="{'cancel-button': !shouldDisableCancel(order) && order.canCancel, 'disabled-button': shouldDisableCancel(order) || !order.canCancel}" (click)="cancelOrder(order)">
+              Cancel order
+            </button>
+          </td>
+        </tr>
+    </tbody>
+</table>

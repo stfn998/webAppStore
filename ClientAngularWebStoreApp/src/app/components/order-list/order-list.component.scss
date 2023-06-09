@@ -1,0 +1,42 @@
+/* Custom styles for the table */
+table.table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table.table th,
+  table.table td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  table.table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+  }
+  
+  /* Styling for the remaining time */
+  .remaining-time {
+    font-weight: bold;
+  }
+  
+  /* Styling for the cancel order button */
+  .cancel-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .cancel-button:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+  }
+  
+  .disabled-button {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  

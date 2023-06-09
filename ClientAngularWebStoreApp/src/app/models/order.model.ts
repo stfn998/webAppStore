@@ -3,7 +3,7 @@ import { Product } from "./product.model";
 
 export interface Order{ 
     id: string,
-    idCustomer: number,
+    customerId: number,
     deliveryAddress: string,
     comment: string,
     orderDate: string,
@@ -17,7 +17,7 @@ export interface Order{
 
 export class Order {
     id!: string;
-    idCustomer!: number;
+    customerId!: number;
     deliveryAddress!: string;
     comment!: string;
     orderDate!: string;

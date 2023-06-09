@@ -26,6 +26,7 @@ import { PersonService } from './services/person.service';
 import { UserGuard } from './guards/user.guard';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { OrderListComponent } from './components/order-list/order-list.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     ProductUpdateComponent,
     OrderCurrentComponent,
     ProductCardComponent,
+    OrderListComponent,
   ],
   imports: [
     BrowserModule,
