@@ -27,6 +27,7 @@ import { UserGuard } from './guards/user.guard';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { OrderListComponent } from './components/order-list/order-list.component';
+import { OrderPreviewComponent } from './components/order-preview/order-preview.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { OrderListComponent } from './components/order-list/order-list.component
     OrderCurrentComponent,
     ProductCardComponent,
     OrderListComponent,
+    OrderPreviewComponent,
   ],
   imports: [
     BrowserModule,

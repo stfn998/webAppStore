@@ -12,6 +12,7 @@
           <th scope="col">Total price</th>
           <th scope="col">Order status</th>
           <th scope="col">Cancel order</th>
+          <th scope="col">Preview order</th>
         </tr>
     </thead>
     <tbody>
@@ -37,6 +38,11 @@
           <td>
             <button [disabled]="shouldDisableCancel(order) || !order.canCancel" [ngClass]="{'cancel-button': !shouldDisableCancel(order) && order.canCancel, 'disabled-button': shouldDisableCancel(order) || !order.canCancel}" (click)="cancelOrder(order)">
               Cancel order
+            </button>
+          </td>
+          <td>
+            <button class="product-button" [routerLink]="['/home/order/order-list/', order.id]">
+              Preview
             </button>
           </td>
         </tr>

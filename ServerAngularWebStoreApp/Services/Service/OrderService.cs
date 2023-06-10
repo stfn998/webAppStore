@@ -402,6 +402,15 @@ namespace Services.Service
                 throw new KeyNotFoundException("Order does not exist.");
             }
 
+            IEnumerable<OrderDetail> orderDetails = await _orderDetailRepository.GetByIdOrder(order.Id);
+            if (orderDetails != null)
+            {
+                foreach (OrderDetail odd in orderDetails)
+                {
+                    order.OrderDetails.Add(odd);
+                }
+            }
+
             OrderDTO dto = _mapper.Map<OrderDTO>(order);
 
             return dto;

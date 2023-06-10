@@ -1,0 +1,103 @@
+<div class="container">
+    <div class="main-body">
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="main-breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a class="router-link" [routerLink]="['/home/order/order-list']">Orders</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Order {{ order?.id }}</li>
+        </ol>
+      </nav>
+      <!-- /Breadcrumb -->
+      <div class="row gutters-sm">
+        <div class="col-md-8">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Delivery address</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{ order?.deliveryAddress }}
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Comment</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{ order?.comment }}
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Order date</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{ order?.orderDate | date : 'dd/MM/yyyy HH:mm' }}
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Delivery date</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                    {{ order?.deliveryTime | date : 'dd/MM/yyyy HH:mm' }}
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Price for products</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{ order?.totalPrice }}
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Price for delivery</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{ order?.shippingCost }}
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Order status</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                    {{ orderStatus }}
+                </div>
+              </div>
+              <hr />
+              <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                      <th scope="col">Product name</th>
+                      <th scope="col">Product price</th>
+                      <th scope="col">Product description</th>
+                      <th scope="col">Product quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of products">
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>{{ product.description }}</td>
+                        <td>{{ product.quantity }}</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
