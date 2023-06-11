@@ -18,7 +18,7 @@ export class VerificationComponent implements OnInit {
   }
 
   private loadPersons() {
-    this.personService.getSellers()
+    this.personService.getSellersAndCustomers()
       .subscribe(persons => {
         this.persons = persons;
       });

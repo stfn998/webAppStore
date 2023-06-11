@@ -11,7 +11,7 @@ namespace Services.IService
 
         Task<PersonDTO> GetPersonByEmail(string email);
 
-        Task<IEnumerable<PersonDTO>> GetSeller();
+        Task<IEnumerable<PersonDTO>> GetSellersAndCustomers();
 
         Task<IEnumerable<PersonDTO>> GetAll();
 

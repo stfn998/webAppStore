@@ -50,9 +50,9 @@ export class PersonService {
       .get<Person>(environment.personServiceUrl + '/api/person/' + id);
   }
 
-  public getSellers(): Observable<Person[]> {
+  public getSellersAndCustomers(): Observable<Person[]> {
     return this.http
-      .get<Person[]>(environment.personServiceUrl + '/api/person/sellers');
+      .get<Person[]>(environment.personServiceUrl + '/api/person/sellers-customers');
   }
 
   public updatePerson(idPerson: string | null, data: any) {

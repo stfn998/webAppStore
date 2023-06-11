@@ -36,6 +36,7 @@ namespace ServerAngularWebStoreApp.Controllers
             return Ok(new { message = "Product successfully added." });
         }
 
+        [Authorize]
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetAllProduct()
@@ -95,6 +96,7 @@ namespace ServerAngularWebStoreApp.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         [Route("{idProduct}")]
         public async Task<IActionResult> GetProduct(int idProduct)

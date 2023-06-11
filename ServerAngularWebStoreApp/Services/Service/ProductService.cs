@@ -28,6 +28,11 @@ namespace Services.Service
         {
             Product product = _mapper.Map<Product>(dto);
 
+            await _genericRepository.Insert(product);
+            await _genericRepository.Save();
+
+            product = await _genericRepository.GetByObject(product.Id);
+
             if (!String.IsNullOrEmpty(dto.ImageUrl))
             {
                 string mimeType;
@@ -73,7 +78,7 @@ namespace Services.Service
                 product.ImageUrl = imagePath;
             }
 
-            await _genericRepository.Insert(product);
+            await _genericRepository.Update(product);
             await _genericRepository.Save();
 
             return true;

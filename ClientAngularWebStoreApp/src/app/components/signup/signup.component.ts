@@ -82,13 +82,20 @@ export class SignupComponent implements OnInit {
             this.signUpForm.reset();
             this.messageService.add({ severity:"success", summary:"Success", detail:"You registered successfully."});
             setTimeout(this.redirect,2000, this.router);
+          }, (error) => {
+            this.messageService.add({ severity:"error", summary:"Error", detail:"User with given username already exists"});
+            this.canSubmitForm =  true;
           });
       } else if(this.signUpForm.value.personType === 'customer') {
+        console.log(this.signUpForm.value);
         this.personService.registerCustomer(this.signUpForm.value)
           .subscribe(() => {
             this.signUpForm.reset();
             this.messageService.add({ severity:"success", summary:"Success", detail:"You registered successfully."});
             setTimeout(this.redirect,2000, this.router);
+          },(error) => {
+            this.messageService.add({ severity:"error", summary:"Error", detail:"User with given username already exists"});
+            this.canSubmitForm =  true;
           });
         }
       } 

@@ -57,12 +57,12 @@ namespace ServerAngularWebStoreApp.Controllers
 
         [Authorize("Admin")]
         [HttpGet]
-        [Route("sellers")]
-        public async Task<IActionResult> GetSeller()
+        [Route("sellers-customers")]
+        public async Task<IActionResult> GetSellersAndCustomers()
         {
             try
             {
-                IEnumerable<PersonDTO> persons = await _personService.GetSeller();
+                IEnumerable<PersonDTO> persons = await _personService.GetSellersAndCustomers();
                 return Ok(persons);
             }
             catch (KeyNotFoundException ex)
@@ -75,6 +75,7 @@ namespace ServerAngularWebStoreApp.Controllers
             }
         }
 
+        [Authorize("Admin")]
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetAllPersons()

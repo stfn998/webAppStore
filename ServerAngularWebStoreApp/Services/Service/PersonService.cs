@@ -189,13 +189,23 @@ namespace Services.Service
             }
         }
 
-        public async Task<IEnumerable<PersonDTO>> GetSeller()
+        public async Task<IEnumerable<PersonDTO>> GetSellersAndCustomers()
         {
-            IEnumerable<Person> persons = await _personRepository.GetPersonByType(Enums.PersonType.Seller);
-            if (persons == null)
+            IEnumerable<Person> sellers = await _personRepository.GetPersonByType(Enums.PersonType.Seller);
+            if (sellers == null)
             {
-                throw new KeyNotFoundException("User does not exists.");
+                throw new KeyNotFoundException("Seller does not exists.");
             }
+
+            IEnumerable<Person> customers = await _personRepository.GetPersonByType(Enums.PersonType.Customer);
+            if (customers == null)
+            {
+                throw new KeyNotFoundException("Customer does not exists.");
+            }
+
+            // Combine sellers and customers into a single list
+            IEnumerable<Person> persons = sellers.Concat(customers);
+
             var dto = await PersonToPersonDTO(persons);
 
             return dto;
