@@ -1,15 +1,6 @@
 <div class="container">
   <div class="main-body">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="main-breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a class="router-link" [routerLink]="['/home']">Home</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">User Profile</li>
-      </ol>
-    </nav>
-    <!-- /Breadcrumb -->
+    <h3 class="mb-3">My profile</h3>
     <div class="row gutters-sm">
       <div class="col-md-4 mb-3">
         <div class="card card-full-height">
@@ -117,10 +108,11 @@
             <hr *ngIf="role === 'Seller'" />
             <div class="row">
               <div class="col-sm-12">
-                <a
-                  class="btn btn-primary"
+                <p-button label="Edit"
+                  styleClass="p-button-warning"
+                  icon="pi pi-pencil"
                   [routerLink]="['/home/persons/edit/', person?.id]"
-                  >Edit</a
+                  ></p-button
                 >
               </div>
             </div>

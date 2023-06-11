@@ -1,15 +1,5 @@
-<h3>Current order</h3>
+<!--<h3>Current order</h3>
 <div *ngIf="order; else errorMessage">
-  <form [formGroup]="orderForm">
-    <div class="form-group pt-3">
-      <div class="input-field" [class.error]="orderForm.controls['address'].dirty && orderForm.hasError('required','address')" > 
-          <span class="fa fa-map-marker p-2"></span> 
-          <input formControlName="address" type="text" placeholder="Delivery address"> 
-      </div>
-    </div>
-    <small *ngIf="orderForm.controls['address'].dirty && orderForm.hasError('required','address')" class="text-danger">
-        *Delivery address is required
-    </small>
     <div class="form-group pt-3">
       <hr />
       <h4>Your order</h4>
@@ -31,16 +21,97 @@
       Total price with <b>{{ order.shippingCost | currency }}</b> for delivery: <b>{{ order.shippingCost + order.totalPrice | currency }}</b>
     </h4>
     <hr />
-    <div class="form-group pt-3">
-      <div class="input-field"> 
-          <span class="fa fa-comment p-2"></span> 
-          <input formControlName="comment" type="text" placeholder="Comment"> 
-      </div>
-    </div>
     <button (click)="submitOrder()" type="submit" class="btn btn-primary btn-block mt-4 w-100">
         Submit order
     </button>
-  </form>
 </div>
 <br />
-<ng-template #errorMessage><h3>No current order.</h3></ng-template>
+<ng-template #errorMessage><h3>No current order.</h3></ng-template>-->
+
+<div class="mx-5">
+<h2>Current order</h2>
+<hr />
+</div>
+<div class="d-flex gap-4 mx-5" *ngIf="order">
+  <div class="w-25">
+    <form [formGroup]="orderForm">
+      <div class="form-group">
+        <div class="input-field-blue" [class.error]="orderForm.controls['address'].dirty && orderForm.hasError('required','address')" > 
+            <i class="pi pi-map-marker p-2"></i> 
+            <input formControlName="address" type="text" placeholder="Delivery address"> 
+        </div>
+      </div>
+      <small *ngIf="orderForm.controls['address'].dirty && orderForm.hasError('required','address')" class="text-danger">
+          *Delivery address is required
+      </small>
+      <div class="form-group pt-3">
+        <div class="input-field-blue"> 
+            <span class="pi pi-comment p-2"></span> 
+            <input formControlName="comment" type="text" placeholder="Comment"> 
+        </div>
+      </div>
+  </form>
+  <div *ngIf="order" class="my-4" style="font-size: 1.5rem;">
+    <div class="d-flex justify-content-between">
+      <div class="font-weight-bold">
+        Products price
+      </div>
+      <div style="color: gray;">
+        {{ order.totalPrice | currency }}
+      </div>
+    </div>
+    <div class="d-flex justify-content-between">
+      <div class="font-weight-bold">
+        Shipping price
+      </div>
+      <div style="color: gray;">
+        {{ order.shippingCost | currency }}
+      </div>
+    </div>
+    <hr>
+    <div class="d-flex justify-content-between">
+      <div class="font-weight-bold">
+        Total
+      </div>
+      <div style="color: gray;">
+        {{ (order.shippingCost + order.totalPrice) | currency }}
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end">
+    <p-button label="Submit order" icon="pi pi-credit-card" (click)="submitOrder()" type="submit" styleClass="p-button-sm" [disabled]="orderForm.invalid || products.length === 0">
+    </p-button>
+  </div>
+  </div>
+  <div class="w-75">
+    <p-table [value]="products" styleClass="p-datatable-striped" selectionMode="single" *ngIf="products!.length > 0"> 
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-nowrap">Product name</th>
+          <th class="text-nowrap">Product price</th>
+          <th class="text-nowrap">Product description</th>
+          <th class="text-nowrap">Quantity</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-element>
+        <tr>
+          <td>{{ element.name }}</td>
+          <td>{{ element.price }}</td>
+          <td>{{ element.description }}</td>
+          <td>
+            <p-inputNumber [min]="1" 
+              [max]="element.quantity" (onClear)="quantityChange($event.value,element)" 
+              (onInput)="quantityChange($event.value,element)"> 
+            </p-inputNumber></td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p *ngIf="products!.length === 0">
+      No products in the order.
+    </p>
+  </div>
+</div>
+<div *ngIf="!order" class="mx-5">
+  Add product to create order.
+</div>
+<p-toast></p-toast>

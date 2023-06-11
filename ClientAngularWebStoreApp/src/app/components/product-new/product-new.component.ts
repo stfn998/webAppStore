@@ -2,6 +2,7 @@ import { Component, OnInit, SecurityContext } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import ValidateForm from 'src/app/helpers/validateform';
 import { Person } from 'src/app/models/person.models';
 import { Product } from 'src/app/models/product.model';
@@ -22,8 +23,9 @@ export class ProductNewComponent implements OnInit {
   productForm!: FormGroup;
   role!: string |  null;
   person?: Person;
+  canSubmitForm : boolean = true;
   
-  constructor(private sanitizer: DomSanitizer, private fb: FormBuilder, private productService: ProductService, private personService: PersonService, private router: Router) { }
+  constructor(private sanitizer: DomSanitizer, private messageService: MessageService, private fb: FormBuilder, private productService: ProductService, private personService: PersonService, private router: Router) { }
 
   ngOnInit(): void {
     this.productForm = this.fb.group({
@@ -38,19 +40,23 @@ export class ProductNewComponent implements OnInit {
 
   onAddProduct(){
     if (this.productForm.valid){
+        this.canSubmitForm =  false;
         this.productForm.addControl('sellerId', new FormControl());
         this.productForm.patchValue({"sellerId": this.person?.id});
         this.productService.addProduct(this.productForm.value)
         .subscribe(() => {
-          this.productForm.reset();
-          this.router.navigateByUrl('');
-          alert("You successfully added a product.") //moze i lepse
+          this.messageService.add({ severity:"success", summary:"Success", detail:"Product successfully added"});
+          setTimeout(this.redirect,2000, this.router);
         });
       } 
       else{
         ValidateForm.validateAllFormFiels(this.productForm);
-        alert("Your form is invalid") //moze i lepse
+        this.messageService.add({ severity:"error", summary:"Error", detail:"Not all fields are valid."});
       }
+  }
+
+  redirect(router : Router) : void{
+    router.navigateByUrl('/home/products/list-product');
   }
 
   private loadPerson() {

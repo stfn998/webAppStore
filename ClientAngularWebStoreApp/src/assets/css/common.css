@@ -47,6 +47,16 @@ a:hover{
     color: #4343ff;
 }
 
+.input-field-blue{
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    color: #2563eb;
+}
+
 .select-field select{
     width: 100%;
     font-family: inherit;

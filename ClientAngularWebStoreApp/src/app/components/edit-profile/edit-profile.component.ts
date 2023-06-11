@@ -2,7 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, SecurityContext } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import ValidateForm from 'src/app/helpers/validateform';
 import { Person } from 'src/app/models/person.models';
 import { PersonService } from 'src/app/services/person.service';
@@ -29,13 +30,15 @@ export class EditProfileComponent implements OnInit {
     shippingCost: new FormControl('', [Validators.required, Validators.min(0)]),
   });
   role!: string |  null;
-
+  canSubmitForm : boolean = true;
   dateOfBirth!: Date
 
   constructor(private personService: PersonService,
               private route: ActivatedRoute,
               private sanitizer: DomSanitizer,
-              private datePipe: DatePipe
+              private datePipe: DatePipe,
+              private router: Router,
+              private messageService: MessageService
               ) { }
 
   ngOnInit(): void {
@@ -45,16 +48,17 @@ export class EditProfileComponent implements OnInit {
 
   onSaveChange(data : any) {
     if (data.valid){
+      this.canSubmitForm =  false;
         this.personService
       .updatePerson(localStorage.getItem('personId'), this.editForm.value)
-      .subscribe((person: Person) => {
-        window.alert('Successfully updated a person!');
-        this.loadPerson();
+      .subscribe((person: any) => {
+        this.messageService.add({ severity:"success", summary:"Success", detail:"Profile successfully updated."});
+        setTimeout(this.redirect,2000, this.router, person.idPerson);
         })}
-    else{
-      alert("Your form is invalid"); //moze i lepse
-      return;
-    }
+  }
+
+  redirect(router : Router, idPerson : any) : void{
+    router.navigate(['/home/persons/', idPerson]);
   }
 
   onFileSelected(event: Event) {

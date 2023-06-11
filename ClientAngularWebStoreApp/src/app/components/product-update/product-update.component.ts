@@ -1,7 +1,8 @@
 import { Component, OnInit, SecurityContext } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { Product } from 'src/app/models/product.model';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -15,6 +16,7 @@ export class ProductUpdateComponent implements OnInit {
   product?: Product;
   imageUrlSafe!: SafeUrl;
   image:Blob=new Blob();
+  canSubmitForm : boolean = true;
   
   productForm: FormGroup = new FormGroup({
     description: new FormControl('', Validators.required),
@@ -26,25 +28,32 @@ export class ProductUpdateComponent implements OnInit {
 
   constructor(private productService: ProductService,               
               private route: ActivatedRoute,
-              private sanitizer: DomSanitizer) { 
+              private sanitizer: DomSanitizer,
+              private router: Router,
+              private messageService: MessageService) { 
       this.loadProduct();
               }
 
   ngOnInit(): void {
   }
 
+
   onSaveChange(data : any) {
     if (data.valid){
+      this.canSubmitForm =  false;
         this.productService
       .updateProduct(Number(this.route.snapshot.paramMap.get('productId')), this.productForm.value)
       .subscribe((product: Product) => {
-        window.alert('Successfully updated a product!');
-        this.loadProduct();
-        })}
+        this.messageService.add({ severity:"success", summary:"Success", detail:"Product successfully updated."});
+        setTimeout(this.redirect,2000, this.router);
+      })}
     else{
-      alert("Your form is invalid"); //moze i lepse
-      return;
+      this.messageService.add({ severity:"error", summary:"Error", detail:"Not all fields are valid."});
     }
+  }
+
+  redirect(router : Router) : void{
+    router.navigateByUrl('/home/products/list-product');
   }
 
   onFileSelected(event: Event) {

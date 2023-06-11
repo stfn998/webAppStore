@@ -115,7 +115,7 @@
                             <small *ngIf="signUpForm.controls['imageUrl'].dirty && signUpForm.hasError('required','imageUrl')" class="text-danger">
                                 *Profile image is required
                             </small>
-                            <button (click)="onSignUp()" type="submit" class="btn btn-primary btn-block mt-4 w-100">
+                            <button (click)="onSignUp()" type="submit" class="btn btn-primary btn-block mt-4 w-100" [disabled]="!canSubmitForm">
                                 Sign up
                             </button>
                             <div class="text-center pt-4 text-muted">
@@ -135,10 +135,5 @@
             </div>
         </div>
     </div>
-  </div>
-
-
-  <!--vizuelno srediti datum i sliku
-    boja kad se smanji, beli deo
-    izbacio sam verification za sada, dodaj posle
--->
+</div>
+<p-toast></p-toast>

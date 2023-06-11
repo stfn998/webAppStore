@@ -15,34 +15,42 @@ import { ProductService } from 'src/app/services/product.service';
 export class ProductListComponent implements OnInit {
   role?: string |  null;
   products?: Product[];
+  products$?: Observable<Product[]>;
 
   constructor(public productService: ProductService) { 
-
-    if(localStorage.getItem('token') !== null)
-    {
-        this.role = localStorage.getItem('role');
-          if (localStorage.getItem('role') === "Seller")
-          {
-            this.productService.getProductsSeller(Number(localStorage.getItem('personId'))).subscribe((data: Product[]) => {
-              if (data)
-              {
-                this.products = productService.products;
-              }
-            });
-          }
-          else
-          {
-            this.productService.getProducts().subscribe((data: Product[]) => {
-              if (data)
-              {
-                this.products = productService.products;
-              }
-            });
-          }
-    }
+    this.updateProducts();
   }
 
   ngOnInit(): void {
   }
 
+  updateProducts() {
+    if(localStorage.getItem('token') !== null)
+    {
+        this.role = localStorage.getItem('role');
+          if (localStorage.getItem('role') === "Seller")
+          {
+            this.products$ =  this.productService
+            .getProductsSeller(Number(localStorage.getItem('personId')));
+            // this.productService
+            //   .getProductsSeller(Number(localStorage.getItem('personId')))
+            //   .subscribe((data: Product[]) => {
+            //     if (data) {
+            //       this.products = productService.products;
+            //     }
+            //   });
+          }
+          else
+          {
+            this.products$ =  this.productService
+            .getProducts();
+            // this.productService.getProducts().subscribe((data: Product[]) => {
+            //   if (data)
+            //   {
+            //     this.products = productService.products;
+            //   }
+            // });
+          }
+    }
+}
 }

@@ -1,4 +1,6 @@
-import { Component, OnChanges, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, Input, OnInit, SimpleChanges, EventEmitter, Output } from '@angular/core';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { Order } from 'src/app/models/order.model';
 import { OrderDetail } from 'src/app/models/orderdetail.model';
 import { Product } from 'src/app/models/product.model';
@@ -14,20 +16,22 @@ export class ProductCardComponent implements OnInit, OnChanges {
   @Input() product?: Product; // Input property for product data
   @Input() role!: string; // Input property for user role
 
+  @Output() updatedProduct = new EventEmitter();
+
   public showAddToCart! : boolean;
   public orderId? : string;
   public order? : Order;
 
-  constructor(private orderService: OrderService, private productService: ProductService) { 
+  constructor(private orderService: OrderService, private productService: ProductService, private messageService: MessageService, private router: Router) { 
 
     this.showAddToCart = true;
-
-    console.log(this.product);
-
-    console.log(this.product?.id);
   }
 
   ngOnInit(): void {
+    this.getOrder();
+  }
+
+  getOrder() {
     if(localStorage.getItem('order') !== null)
     {
       const item = localStorage.getItem('order');
@@ -48,13 +52,10 @@ export class ProductCardComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes) {
-      // Perform any necessary operations when the input property changes
-      console.log('Product changed:', this.product);
     }
   }
 
   addToCart(product : Product){
-
     if(localStorage.getItem('order') !== null)
     {
       const item = localStorage.getItem('order');
@@ -74,32 +75,33 @@ export class ProductCardComponent implements OnInit, OnChanges {
     
     if (this.orderId === undefined)
     {
-      console.log("prvi if");
       this.orderService.newOrder(product.id, Number(localStorage.getItem('personId'))).subscribe((data: OrderDetail) => {
         if (data)
         {
-          console.log(this.orderService.order); //azuriraj korpu da pise +1
           this.showAddToCart = false;
+          this.messageService.add({ severity:"success", summary:"Success", detail:"Product added to cart successfully."});
+          this.getOrder();
         }
       });
     }
     else
     {
-      console.log("drugi if");
       this.orderService.addProduct(product.id, this.orderService.order?.id ?? '').subscribe((data: OrderDetail) => {
         if (data)
         {
           this.showAddToCart = false;
-          console.log(this.orderService.order); //azuriraj korpu da pise +1
+          this.messageService.add({ severity:"success", summary:"Success", detail:"Product added to cart successfully."});
+          this.getOrder();
         }
       });
     }
   }
 
   removeFromCart(product : Product){
+    this.getOrder();
     if (this.orderId === undefined)
     {
-      alert("Can not remove product") //moze i lepse
+      alert("Can not remove product");
     }
     else
     {
@@ -110,12 +112,11 @@ export class ProductCardComponent implements OnInit, OnChanges {
             (detail) => detail.productId !== product.id
           );
           this.orderService.order = updatedOrder; // Assign the updated order back to the order property
-          alert("Product removed from cart");
+          this.messageService.add({ severity:"info", summary:"Success", detail:"Product removed from cart successfully."});
           this.showAddToCart = true;
-          console.log(this.orderService.order);
         }
         else{
-          alert("Error while removing a product") //moze i lepse
+          this.messageService.add({ severity:"error", summary:"Error", detail:"Error while deleting a product."});
         }
       });
         
@@ -126,13 +127,18 @@ export class ProductCardComponent implements OnInit, OnChanges {
       this.productService.deleteProduct(id)
       .subscribe((data: boolean) => {
         if (data) {
-          alert("Product is deleted successfully"); //moze i lepse
+          this.messageService.add({ severity:"success", summary:"Success", detail:"Product deleted successfully."});
           this.productService.getProductsSeller(Number(localStorage.getItem('personId')));
+          setTimeout(this.redirect,2000, this.updatedProduct);
         }
         else{
-          alert("Error while deleting a product") //moze i lepse
+          this.messageService.add({ severity:"error", summary:"Error", detail:"Error while deleting a product."});
         }
     });
+  }
+  
+  redirect(updatedProduct: any) : void{
+    updatedProduct.emit();
   }
 
 }

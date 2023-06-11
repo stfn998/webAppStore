@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import ValidateForm from 'src/app/helpers/validateform';
 import { Order } from 'src/app/models/order.model';
 import { OrderDetail } from 'src/app/models/orderdetail.model';
@@ -18,7 +19,6 @@ export class OrderCurrentComponent implements OnInit {
   public products: Product[] = [];
   public total: Number = 0;
   public order?: Order;
-
   orderForm!: FormGroup;
 
   constructor(
@@ -26,7 +26,8 @@ export class OrderCurrentComponent implements OnInit {
     public productService: ProductService,
     private router: Router,
     private fb: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private messageService: MessageService
   ) {
   
     const item = localStorage.getItem('order');
@@ -45,7 +46,6 @@ export class OrderCurrentComponent implements OnInit {
           address: ['', Validators.required],
           comment: ['']});
     }
-
   }
 
   ngOnInit(): void {
@@ -76,16 +76,20 @@ export class OrderCurrentComponent implements OnInit {
         this.order.comment = this.orderForm.get('comment')?.value
         this.orderService.saveOrder(Number(this.order?.id), this.order)
           .subscribe(() => {
+            this.messageService.add({ severity:"success", summary:"Success", detail:"Order submitted successfully"});
             this.orderForm.reset();
             localStorage.removeItem('order');         
-            this.router.navigateByUrl('');
-            alert("Your order has been submitted.") //moze i lepse
+            setTimeout(this.redirect,2000, this.router);
           });
       }
       else{
         ValidateForm.validateAllFormFiels(this.orderForm);
-        alert("Your form is invalid") //moze i lepse
       }
   }
-  
+
+  redirect(router : Router) : void{
+    router.navigateByUrl('/home/order/order-list');
+  }
+
+
 }

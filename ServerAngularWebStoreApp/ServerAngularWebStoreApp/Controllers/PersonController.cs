@@ -32,7 +32,7 @@ namespace ServerAngularWebStoreApp.Controllers
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(dto);
         }
 
         [Authorize("Admin")]

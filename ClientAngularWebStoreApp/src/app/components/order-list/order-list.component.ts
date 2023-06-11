@@ -13,6 +13,7 @@ export class OrderListComponent implements OnInit {
   orders: Order[] = []
   currentOrderId: Number;
   customerId: Number;
+  orderPreview?: Order;
 
   constructor(public orderService : OrderService, public productService: ProductService) { 
     this.currentOrderId = -1;
@@ -58,7 +59,6 @@ export class OrderListComponent implements OnInit {
           });
         });
       });
-      console.log(orders);
       this.orders = orders;
     })
   }

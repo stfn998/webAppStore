@@ -46,8 +46,6 @@ export class OrderPreviewComponent implements OnInit {
         });      
       this.order = order;
       this.orderStatus = this.getOrderStatus(order);
-      console.log(order);
-      console.log(this.products);
     });
   }
 

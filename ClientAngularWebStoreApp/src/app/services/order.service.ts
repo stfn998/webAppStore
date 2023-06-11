@@ -94,7 +94,6 @@ export class OrderService {
   }
   
   saveOrder(idOrder: number | null, order : Order) : Observable<OrderDetail> {
-    console.log(order);
     return this.http.put<OrderDetail>(environment.orderServiceUrl + '/api/order/' + idOrder, order);
   }
 

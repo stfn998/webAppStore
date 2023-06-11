@@ -14,7 +14,6 @@ export class SellerGuard implements CanActivate {
         if(token != null) {
             let role = localStorage.getItem('role');
             let activate = localStorage.getItem('activate');
-            console.log(role + ' ' + activate);
 
             if(role === 'Seller' && activate === 'Active') {
                 return true;

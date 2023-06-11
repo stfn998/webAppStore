@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import ValidateForm from 'src/app/helpers/validateform';
 import { PersonService } from 'src/app/services/person.service';
 
@@ -18,10 +19,12 @@ export class SignupComponent implements OnInit {
   eyeIcon: string = "fa-eye-slash";
   eyeIcon2: string = "fa-eye-slash";
   signUpForm!: FormGroup;
+  canSubmitForm : boolean = true;
 
   constructor(private fb: FormBuilder,
               private router: Router,
-              private personService: PersonService) { 
+              private personService: PersonService,
+              private messageService: MessageService) { 
   }
 
   ngOnInit(): void {
@@ -72,27 +75,31 @@ export class SignupComponent implements OnInit {
 
   onSignUp(){
     if (this.signUpForm.valid){
+      this.canSubmitForm =  false;
       if(this.signUpForm.value.personType === 'seller') {
         this.personService.registerSeller(this.signUpForm.value)
           .subscribe(() => {
             this.signUpForm.reset();
-            this.router.navigateByUrl('');
-            alert("You are successfully registred.") //moze i lepse
+            this.messageService.add({ severity:"success", summary:"Success", detail:"You registered successfully."});
+            setTimeout(this.redirect,2000, this.router);
           });
       } else if(this.signUpForm.value.personType === 'customer') {
-        console.log(this.signUpForm.value);
         this.personService.registerCustomer(this.signUpForm.value)
           .subscribe(() => {
             this.signUpForm.reset();
-            this.router.navigateByUrl('');
-            alert("You are successfully registred.") //moze i lepse
+            this.messageService.add({ severity:"success", summary:"Success", detail:"You registered successfully."});
+            setTimeout(this.redirect,2000, this.router);
           });
         }
       } 
       else{
         ValidateForm.validateAllFormFiels(this.signUpForm);
-        alert("Your form is invalid") //moze i lepse
+        this.messageService.add({ severity:"error", summary:"Error", detail:"Not all fields are valid."});
       }
+  }
+
+  redirect(router : Router) : void{
+    router.navigateByUrl('');
   }
 
   get firstName() {

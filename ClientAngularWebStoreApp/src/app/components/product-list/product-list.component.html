@@ -1,7 +1,8 @@
-<div class="product-grid">
+<div class="product-grid mx-5">
   <app-product-card
-    *ngFor="let product of products"
+    *ngFor="let product of products$ | async"
     [product]="product"
     [role]="role || ''"
+    (updatedProduct)="updateProducts()"
   ></app-product-card>
 </div>

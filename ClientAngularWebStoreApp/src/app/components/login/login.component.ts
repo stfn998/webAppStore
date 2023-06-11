@@ -5,6 +5,7 @@ import { PersonService } from 'src/app/services/person.service';
 import { Router } from '@angular/router';
 import { Token } from 'src/app/models/token.models';
 import { Person } from 'src/app/models/person.models';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup ;
   constructor(private fb: FormBuilder,
               private personService: PersonService,
-              private router: Router
+              private router: Router,
+              private messageService: MessageService
               ) { }
 
   ngOnInit(): void {
@@ -46,15 +48,14 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('role', data.role);
           localStorage.setItem('activate', data.activate);
           this.router.navigateByUrl('/home');
-          alert("You are successfully loged in.") //moze i lepse
         },
         error => {
-          alert("Authentication failed.");
+          this.messageService.add({ severity:"error", summary:"Error", detail:"Login failed"});
+          this.loginForm.reset();
         }
       )
     }else{
       ValidateForm.validateAllFormFiels(this.loginForm);
-      alert("Your form is invalid")
     }
   }
 

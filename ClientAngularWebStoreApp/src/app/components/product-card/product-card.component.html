@@ -1,20 +1,21 @@
 <div class="product-card" *ngIf="product">
-    <img [src]="product.imageUrl" alt="Product Image" class="product-image">
+    <div class="d-flex justify-content-center">
+        <img [src]="product.imageUrl" alt="Product Image" class="product-image">
+    </div>
     <h3 class="product-name">{{ product.name }}</h3>
     <p class="product-price">{{ product.price | currency }}</p>
-    <p>{{ product.description }}</p>
-    <div class="product-buttons">
-      <button class="product-button" (click)="deleteProduct(product.id)" *ngIf="role === 'Seller'">
-          Delete
-      </button>
-      <button class="product-button" [routerLink]="['/home/products/edit/', product.id]" *ngIf="role === 'Seller'">
-          Update
-      </button>
-      <button class="product-button" (click)="addToCart(product)" *ngIf="role === 'Customer' && showAddToCart">
-          Add to cart
-      </button>
-      <button class="product-button" (click)="removeFromCart(product)" *ngIf="role === 'Customer' && !showAddToCart">
-          Remove from cart
-      </button>
+    <div class="w-100">
+        {{ product.description }}
     </div>
-</div>  
+    <div class="product-buttons">
+      <p-button label="Delete" icon="pi pi-trash" styleClass="p-button-danger" (click)="deleteProduct(product.id)" *ngIf="role === 'Seller'">
+      </p-button>
+      <p-button label="Update" icon="pi pi-pencil" styleClass="p-button-warning" [routerLink]="['/home/products/edit/', product.id]" *ngIf="role === 'Seller'">
+      </p-button>
+      <p-button label="Add to cart" icon="pi pi-cart-plus" (click)="addToCart(product)" *ngIf="role === 'Customer' && showAddToCart">
+      </p-button>
+      <p-button label="Remove from cart" icon="pi pi-undo" styleClass="p-button-danger" (click)="removeFromCart(product)" *ngIf="role === 'Customer' && !showAddToCart">
+      </p-button>
+    </div>
+</div> 
+<p-toast></p-toast>
